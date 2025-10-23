@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- PROBLEMA INTENCIONADO: Título no descriptivo │ -->
+    <title>Pagina principal de TechHub</title>
+    
+    <!-- PROBLEMA: Falta descripción meta │ -->
+    <meta name="description" content="TechHub es tu portal tecnológico para estar al día con las últimas tendencias en tecnología, programación y desarrollo web.">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        /* PROBLEMAS INTENCIONADOS DE CSS PARA ACCESIBILIDAD */
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+        
+        .feature-card {
+            border: 1px solid #ddd;
+            padding: 2rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            background: white;
+        }
+        
+        /* PROBLEMA: Contraste insuficiente */
+        .link-sutil {
+            color: #ccc;
+            text-decoration: none;
+        }
+        
+        /* PROBLEMA: Elementos no enfocables visualmente */
+        .btn-invisible:focus {
+            outline: none;
+        }
+        
+        /* PROBLEMA: Texto muy pequeño */
+        .texto-pequeño {
+            font-size: 10px;
+            color: #888;
+        }
+    </style>
+</head>
+
+<!-- PROBLEMA: Lang incorrecto para contenido en español │ -->
+<body lang="es">
+
+    <!-- PROBLEMA: Falta skip link -->
+    
+    <!-- PROBLEMA: Header sin role banner -->
+    <div class="hero-section">
+        <div class="container">
+            <!-- PROBLEMA: Múltiples H1 en la página │ -->
+            <h1>Bienvenido a TechHub</h1>
+            <h2>Tu portal tecnológico</h2>
+            
+            <!-- PROBLEMA: Párrafo importante sin estructura semántica -->
+            <div>Descubre las últimas tendencias en tecnología, programación y desarrollo web. 
+                 Mantente actualizado con nuestros artículos y tutoriales.</div>
+            
+            <!-- PROBLEMA: Botón importante sin aria-label -->
+            <button class="btn btn-primary btn-lg mt-3" onclick="alert('¡Funciona!')">
+                Comenzar ahora
+            </button>
+        </div>
+    </div>
+    
+    <!-- PROBLEMA: Nav sin role navigation ni aria-label -->
+    <div class="navbar navbar-expand-lg" style="background-color: #f8f9fa;">
+        <div class="container">
+            <!-- PROBLEMA: Logo sin texto alternativo -->
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect width='40' height='40' fill='%23007bff'/%3E%3C/svg%3E" class="me-2">
+            
+            <!-- PROBLEMA: Links de navegación sin estructura semántica -->
+            <div>
+                <!-- PROBLEMA: Links sin contexto -->
+                <a href="#Inicio" class="me-3">Inicio</a>
+                <a href="#Articulos" class="me-3">Artículos</a>
+                <a href="#Tutoriales" class="me-3">Tutoriales</a>
+                <a href="#Contacto" class="me-3">Contacto</a>
+                
+                <!-- PROBLEMA: Texto de link genérico -->
+                <a href="#" class="link-sutil">Leer más</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- PROBLEMA: Contenido principal sin main ni landmark -->
+    <div class="container my-5">
+        
+        <!-- PROBLEMA: Sección sin encabezado ni landmark apropiado -->
+        <div class="row">
+            <!-- PROBLEMA: Jerarquía de encabezados incorrecta -->
+            <div class="col-md-8">
+                <h4 id="Inicio">Últimas noticias tecnológicas</h4>
+                
+                <!-- PROBLEMA: Artículos sin estructura semántica -->
+                <div class="feature-card">
+                    <!-- PROBLEMA: Imagen decorativa con alt text -->
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect width='100' height='100' fill='%23ffc107'/%3E%3C/svg%3E" 
+                         alt="Imagen de JavaScript" class="mb-3">
+                    
+                    <!-- PROBLEMA: Encabezado no descriptivo -->
+                    <h5>Nuevo</h5>
+                    <p>Las nuevas características de JavaScript ES2024 que debes conocer. 
+                       Aprende sobre las últimas funcionalidades del lenguaje más popular.</p>
+                    
+                    <!-- PROBLEMA: Link sin contexto -->
+                    <a href="#" class="btn btn-outline-primary">Ver más</a>
+                </div>
+                
+                <div class="feature-card">
+                    <!-- PROBLEMA: Imagen sin texto alternativo -->
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect width='100' height='100' fill='%2328a745'/%3E%3C/svg%3E" 
+                         class="mb-3">
+                    
+                    <h5>Tutorial completo de React Hooks</h5>
+                    <p>Domina los React Hooks con este tutorial paso a paso. 
+                       Desde useState hasta hooks personalizados.</p>
+                    
+                    <!-- PROBLEMA: Botón que no es botón -->
+                    <div class="btn btn-outline-success" onclick="location.href='#'">
+                        Leer tutorial
+                    </div>
+                </div>
+                
+                <!-- PROBLEMA: Contenido importante sin estructura -->
+                <div style="border: 2px solid red; padding: 1rem; margin: 1rem 0;">
+                    ⚠️ AVISO IMPORTANTE: El sitio estará en mantenimiento el próximo domingo de 2:00 a 4:00 AM
+                </div>
+            </div>
+            
+            <!-- PROBLEMA: Sidebar sin landmark apropiado -->
+            <div class="col-md-4">
+                <!-- PROBLEMA: Encabezado con nivel incorrecto -->
+                <h2>Recursos populares</h2>
+                
+                <!-- PROBLEMA: Lista no semántica -->
+                <div class="list-group">
+                    <!-- PROBLEMA: Links repetitivos sin diferenciación -->
+                    <div class="list-group-item">
+                        <a href="#">Guía de CSS Grid</a>
+                        <span class="texto-pequeño">hace 2 días</span>
+                    </div>
+                    <div class="list-group-item">
+                        <a href="#">Introducción a TypeScript</a>
+                        <span class="texto-pequeño">hace 5 días</span>
+                    </div>
+                    <div class="list-group-item">
+                        <a href="#">Node.js para principiantes</a>
+                        <span class="texto-pequeño">hace 1 semana</span>
+                    </div>
+                    <div class="list-group-item">
+                        <a href="#">Responsive Design tips</a>
+                        <span class="texto-pequeño">hace 2 semanas</span>
+                    </div>
+                </div>
+                
+                <!-- PROBLEMA: Formulario sin labels ni estructura accesible -->
+                <div class="mt-4 p-3" style="background-color: #f0f0f0;">
+                    <h6>Newsletter</h6>
+                    <form>
+                        <!-- PROBLEMA: Input sin label -->
+                        <input type="email" placeholder="Tu email" class="form-control mb-2">
+                        
+                        <!-- PROBLEMA: Checkbox sin label asociado -->
+                        <input type="checkbox" id="acepto"> Acepto términos y condiciones
+                        
+                        <!-- PROBLEMA: Botón de envío sin indicar acción -->
+                        <button type="submit" class="btn btn-sm btn-primary btn-invisible">Enviar</button>
+                    </form>
+                </div>
+                
+                <!-- PROBLEMA: Widget sin estructura semántica -->
+                <div class="mt-4 p-3 border">
+                    <h6>Clima</h6>
+                    <!-- PROBLEMA: Información importante sin estructura -->
+                    <div>Madrid: 22°C ☀️</div>
+                    <div>Barcelona: 18°C ⛅</div>
+                    <div>Valencia: 25°C ☀️</div>
+                    <!-- PROBLEMA: Última actualización sin contexto temporal -->
+                    <div class="texto-pequeño">Actualizado: 14:30</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- PROBLEMA: Sección de testimonios sin estructura -->
+        <div class="mt-5">
+            <h3>Lo que dicen nuestros usuarios</h3>
+            
+            <div class="row">
+                <div class="col-md-4">
+                    <!-- PROBLEMA: Testimonio sin cita semántica -->
+                    <div class="text-center">
+                        <!-- PROBLEMA: Avatar sin descripción -->
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Ccircle cx='40' cy='40' r='40' fill='%23007bff'/%3E%3C/svg%3E" 
+                             class="rounded-circle mb-3">
+                        <p>"Excelente contenido y muy útil para aprender programación."</p>
+                        <!-- PROBLEMA: Autor sin marcado semántico -->
+                        <div>- María García</div>
+                        <div class="texto-pequeño">Desarrolladora Frontend</div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Ccircle cx='40' cy='40' r='40' fill='%2328a745'/%3E%3C/svg%3E" 
+                             class="rounded-circle mb-3">
+                        <p>"Los tutoriales son muy claros y fáciles de seguir."</p>
+                        <div>- Juan Rodríguez</div>
+                        <div class="texto-pequeño">Estudiante</div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Ccircle cx='40' cy='40' r='40' fill='%23ffc107'/%3E%3C/svg%3E" 
+                             class="rounded-circle mb-3">
+                        <p>"Siempre encuentro respuestas a mis dudas técnicas."</p>
+                        <div>- Ana López</div>
+                        <div class="texto-pequeño">Full Stack Developer</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- PROBLEMA: Footer sin role contentinfo -->
+    <div style="background-color: #343a40; color: white; padding: 3rem 0; margin-top: 3rem;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <!-- PROBLEMA: Información de contacto sin estructura -->
+                    <h5>Contacto</h5>
+                    <div>Email: info@techhub.com</div>
+                    <div>Teléfono: +34 900 123 456</div>
+                    <div>Dirección: Calle Ejemplo 123, Madrid</div>
+                </div>
+                
+                <div class="col-md-6">
+                    <h5>Síguenos</h5>
+                    <!-- PROBLEMA: Enlaces sociales sin texto descriptivo -->
+                    <div>
+                        <a href="#" class="text-white me-3">📘</a>
+                        <a href="#" class="text-white me-3">🐦</a>
+                        <a href="#" class="text-white me-3">💼</a>
+                        <a href="#" class="text-white">📷</a>
+                    </div>
+                    
+                    <!-- PROBLEMA: Copyright sin marcado semántico -->
+                    <div class="mt-3 texto-pequeño">
+                        © 2025 TechHub. Todos los derechos reservados.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- PROBLEMA: Scripts sin defer/async apropiado -->
+    <script src="{{ url_for('static', filename='js/portal.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- PROBLEMA: Regiones live mal implementadas -->
+    <div id="messages"></div>
+    
+    <script>
+        // PROBLEMA INTENCIONADO: JavaScript sin accesibilidad
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simular notificaciones que no son accesibles
+            setTimeout(function() {
+                document.getElementById('messages').innerHTML = 
+                    '<div style="position: fixed; top: 20px; right: 20px; background: red; color: white; padding: 1rem;">¡Nueva notificación!</div>';
+            }, 3000);
+            
+            // PROBLEMA: Evento click sin manejo de teclado
+            document.querySelectorAll('.feature-card').forEach(function(card) {
+                card.addEventListener('click', function() {
+                    // Acción sin feedback accesible
+                    console.log('Card clicked');
+                });
+            });
+        });
+    </script>
+    
+</body>
+</html>
+
+<!-- 
+LISTA DE PROBLEMAS DE ACCESIBILIDAD PARA CORREGIR:
+
+ESTRUCTURA Y SEMÁNTICA:
+1. │ Título de página no descriptivo
+2. ✗ Falta meta descripción
+3. │ Lang attribute incorrecto en body
+4. ✗ Falta skip link para navegación
+5. ✗ Múltiples H1 en la página
+6. ✗ Jerarquía de encabezados incorrecta (h4 antes que h2/h3)
+7. ✗ Falta elemento <main> para contenido principal
+8. ✗ Header sin role="banner"
+9. ✗ Nav sin role="navigation" ni aria-label
+10. ✗ Footer sin role="contentinfo"
+
+IMÁGENES Y MULTIMEDIA:
+11. ✗ Logo sin alt text descriptivo
+12. ✗ Imágenes decorativas con alt text innecesario
+13. ✗ Imagen sin alt text
+14. ✗ Avatares sin descripción
+
+FORMULARIOS:
+15. ✗ Input sin label asociado
+16. ✗ Checkbox sin label asociado correctamente
+17. ✗ Botón de envío sin descripción de acción
+
+NAVEGACIÓN Y ENLACES:
+18. ✗ Enlaces con texto genérico ("Ver más", "Leer más")
+19. ✗ Enlaces sociales sin texto descriptivo (solo emojis)
+20. ✗ Elemento div que actúa como botón
+21. ✗ Links sin contexto suficiente
+
+CONTENIDO DINÁMICO:
+22. ✗ Notificaciones no anunciadas a lectores de pantalla
+23. ✗ Falta regiones aria-live apropiadas
+24. ✗ Contenido importante (aviso) sin role="alert"
+
+ESTILOS Y CONTRASTE:
+25. ✗ Contraste insuficiente en .link-sutil
+26. ✗ Texto muy pequeño (10px) no legible
+27. ✗ Focus outline removido sin alternativa
+
+LANDMARKS Y REGIONES:
+28. ✗ Sidebar sin aside landmark
+29. ✗ Artículos sin <article> elements
+30. ✗ Testimonios sin estructura semántica apropiada
+
+INTERACTIVIDAD:
+31. ✗ Eventos click sin equivalente de teclado
+32. ✗ Botones invisibles al foco
+33. ✗ Elementos clickeables sin indicación visual
+
+INFORMACIÓN TEMPORAL:
+34. ✗ Tiempo relativo sin contexto absoluto
+35. ✗ Información de clima sin actualización temporal clara
+
+Los estudiantes (en equipo) deben corregir estos problemas aplicando:
+- Landmarks semánticos (main, nav, aside, header, footer)
+- Jerarquía correcta de encabezados
+- Alt text apropiado para imágenes
+- Labels y descripciones para formularios
+- Roles ARIA donde sea necesario
+- Regiones aria-live para contenido dinámico
+- Mejoras de contraste y visibilidad de foco
+- Estructura semántica apropiada (article, section, etc.)
+-->

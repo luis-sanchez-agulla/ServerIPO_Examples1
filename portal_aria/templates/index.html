@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UFV - Portal de Prácticas de Accesibilidad Web con ARIA</title>
+    <meta name="description" content="Portal educativo para aprender y practicar técnicas avanzadas de accesibilidad web utilizando atributos y roles ARIA">
+    <meta name="author" content="UFV - Sistema de Enseñanza de Accesibilidad Web">
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    
+    <!-- Bootstrap CDN para algunos ejercicios -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Saltar al contenido principal -->
+    <a href="#main-content" class="sr-only sr-only-focusable">Saltar al contenido principal</a>
+    
+    <!-- Header del portal -->
+    <header class="portal-header" role="banner">
+        <div class="container">
+            <h1 class="portal-title">UFV - Portal de Accesibilidad Web</h1>
+            <p class="portal-subtitle">Prácticas avanzadas con HTML5 y ARIA</p>
+        </div>
+    </header>
+    
+    <!-- Navegación principal -->
+    <nav class="navbar" role="navigation" aria-label="Navegación principal">
+        <div class="container">
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="/" aria-current="page">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#ejercicios">Ejercicios</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#instrucciones">Instrucciones</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#recursos">Recursos</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Contenido principal -->
+    <main id="main-content" class="container" role="main">
+        
+        <!-- Introducción -->
+        <section class="intro-section" aria-labelledby="intro-heading">
+            <h2 id="intro-heading">Bienvenido al Portal de Prácticas ARIA</h2>
+            <div class="alert alert-info" role="region" aria-labelledby="info-heading">
+                <h3 id="info-heading">📚 Información importante</h3>
+                <p>Este portal contiene <strong>{{ ejercicios|length }} ejercicios prácticos</strong> diseñados para enseñar técnicas avanzadas de accesibilidad web. Cada ejercicio contiene <em>errores intencionados</em> que debes identificar y corregir.</p>
+                <p><strong>Objetivo:</strong> Mejorar la accesibilidad utilizando roles ARIA, atributos semánticos y técnicas de navegación con teclado.</p>
+            </div>
+        </section>
+        
+        <!-- Lista de ejercicios -->
+        <section id="ejercicios" aria-labelledby="ejercicios-heading">
+            <h2 id="ejercicios-heading">Ejercicios Disponibles</h2>
+            
+            <div class="ejercicios-grid">
+                {% for key, ejercicio in ejercicios.items() %}
+                <article class="ejercicio-card" role="article">
+                    <h3 class="ejercicio-titulo">
+                        <a href="{{ url_for('ejercicio', nombre=key) }}" aria-describedby="desc-{{ key }}">
+                            {{ ejercicio.titulo }}
+                        </a>
+                    </h3>
+                    
+                    <div class="dificultad-badge dificultad-{{ ejercicio.dificultad.lower() }}">
+                        {{ ejercicio.dificultad }}
+                    </div>
+                    
+                    <p id="desc-{{ key }}" class="ejercicio-descripcion">
+                        {{ ejercicio.descripcion }}
+                    </p>
+                    
+                    <div class="conceptos-section">
+                        <h4>Conceptos a practicar:</h4>
+                        <ul class="conceptos-list">
+                            {% for concepto in ejercicio.conceptos %}
+                            <li>{{ concepto }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    
+                    <a href="{{ url_for('ejercicio', nombre=key) }}" class="btn btn-primary">
+                        Comenzar ejercicio
+                        <span class="sr-only">{{ ejercicio.titulo }}</span>
+                    </a>
+                </article>
+                {% endfor %}
+            </div>
+        </section>
+        
+        <!-- Instrucciones -->
+        <section id="instrucciones" aria-labelledby="instrucciones-heading">
+            <h2 id="instrucciones-heading">Instrucciones de Uso</h2>
+            
+            <div class="row">
+                <div class="col">
+                    <h3>🔍 Cómo usar este portal</h3>
+                    <ol>
+                        <li><strong>Selecciona un ejercicio</strong> de la lista anterior</li>
+                        <li><strong>Analiza el código HTML</strong> con herramientas de validación:
+                            <ul>
+                                <li><a href="https://wave.webaim.org/" target="_blank" rel="noopener">WAVE Web Accessibility Evaluator</a></li>
+                                <li><a href="https://www.deque.com/axe/" target="_blank" rel="noopener">AXE DevTools</a></li>
+                                <li><a href="https://accessibilityinsights.io/" target="_blank" rel="noopener">Accessibility Insights</a></li>
+                            </ul>
+                        </li>
+                        <li><strong>Identifica los problemas</strong> de accesibilidad</li>
+                        <li><strong>Corrige el código</strong> utilizando técnicas ARIA apropiadas</li>
+                        <li><strong>Valida tus cambios</strong> con las herramientas mencionadas</li>
+                    </ol>
+                </div>
+                
+                <div class="col">
+                    <h3>⚠️ Problemas comunes a buscar</h3>
+                    <ul>
+                        <li>Estructura de encabezados incorrecta</li>
+                        <li>Falta de texto alternativo en imágenes</li>
+                        <li>Formularios sin etiquetas accesibles</li>
+                        <li>Mensajes de error no asociados</li>
+                        <li>Contenido dinámico no anunciado</li>
+                        <li>Navegación con teclado problemática</li>
+                        <li>Falta de landmarks semánticos</li>
+                        <li>Estados y propiedades ARIA ausentes</li>
+                        <li>Contraste de colores insuficiente</li>
+                        <li>Elementos no enfocables con teclado</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Recursos adicionales -->
+        <section id="recursos" aria-labelledby="recursos-heading">
+            <h2 id="recursos-heading">Recursos de Referencia</h2>
+            
+            <div class="row">
+                <div class="col">
+                    <h3>📖 Documentación oficial</h3>
+                    <ul>
+                        <li><a href="https://www.w3.org/WAI/ARIA/apg/" target="_blank" rel="noopener">WAI-ARIA Authoring Practices Guide</a></li>
+                        <li><a href="https://www.w3.org/TR/wai-aria-1.1/" target="_blank" rel="noopener">WAI-ARIA 1.1 Specification</a></li>
+                        <li><a href="https://www.w3.org/WAI/WCAG21/quickref/" target="_blank" rel="noopener">WCAG 2.1 Quick Reference</a></li>
+                        <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA" target="_blank" rel="noopener">MDN ARIA Documentation</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col">
+                    <h3>🛠️ Herramientas útiles</h3>
+                    <ul>
+                        <li><a href="https://www.nvaccess.org/" target="_blank" rel="noopener">NVDA Screen Reader</a> (gratuito)</li>
+                        <li><a href="https://chrome.google.com/webstore/detail/screen-reader/kgejglhpjiefppelpmljglcjbhoiplfn" target="_blank" rel="noopener">Screen Reader para Chrome</a></li>
+                        <li><a href="https://www.colour-contrast.com/" target="_blank" rel="noopener">Color Contrast Analyzer</a></li>
+                        <li><a href="https://validator.w3.org/" target="_blank" rel="noopener">W3C Markup Validator</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="alert alert-warning" role="region" aria-labelledby="warning-heading">
+                <h3 id="warning-heading">⚡ Recordatorio importante</h3>
+                <p>Todos los ejercicios contienen <strong>errores intencionados</strong>. Tu tarea es encontrarlos y corregirlos para mejorar la accesibilidad. No te desanimes si encuentras muchos problemas: ¡es exactamente lo que esperamos!</p>
+            </div>
+        </section>
+        
+        <!-- Progreso del usuario -->
+        <section aria-labelledby="progreso-heading">
+            <h2 id="progreso-heading">Tu Progreso</h2>
+            <div class="progreso-container">
+                <p>Ejercicios completados: <strong id="ejercicios-completados">0</strong> de {{ ejercicios|length }}</p>
+                <div class="progreso-barra" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="{{ ejercicios|length }}" aria-labelledby="progreso-heading">
+                    <div class="progreso-fill" style="width: 0%"></div>
+                </div>
+                <p class="sr-only">Progreso: 0 por ciento completado</p>
+            </div>
+        </section>
+        
+    </main>
+    
+    <!-- Footer -->
+    <footer class="portal-footer" role="contentinfo">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <p>&copy; mCardenas; 2025 Portal de Accesibilidad Web. Creado con fines educativos.</p>
+                    <p>Desarrollado como herramienta de aprendizaje para técnicas avanzadas de ARIA.</p>
+                </div>
+                <div class="col">
+                    <h3>UFV - Interacción Persona Ordenador</h3>
+                    <h3>Contacto y soporte</h3>
+                    <p>Para preguntas sobre los ejercicios: 
+                        <br><a href="mailto:susana.bautista@ufv.es">susana.bautista@ufv.es</a>
+                        <br><a href="mailto:marlon.cardenas@ufv.es">marlon.cardenas@ufv.es</a>
+                        <br>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/portal.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Región live para anuncios -->
+    <div id="anuncios-live" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+    <div id="alertas-live" aria-live="assertive" aria-atomic="true" class="sr-only"></div>
+    
+</body>
+</html>

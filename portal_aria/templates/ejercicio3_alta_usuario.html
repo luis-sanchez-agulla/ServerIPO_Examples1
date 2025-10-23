@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ titulo }}</title>
+    <meta name="description" content="{{ descripcion }}">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        .registration-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+        
+        .registration-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin: 2rem auto;
+            max-width: 1200px;
+        }
+        
+        .form-section {
+            padding: 2rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .form-section:last-child {
+            border-bottom: none;
+        }
+        
+        .form-progress {
+            background: #f8f9fa;
+            padding: 1rem 2rem;
+        }
+        
+        .progress-bar-custom {
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #007bff, #0056b3);
+            transition: width 0.3s ease;
+        }
+        
+        /* PROBLEMAS INTENCIONADOS */
+        .required-field::after {
+            content: " *";
+            color: red;
+        }
+        
+        .field-help {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 0.25rem;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+        
+        .checkbox-group {
+            margin-top: 0.5rem;
+        }
+        
+        .file-upload-area {
+            border: 2px dashed #dee2e6;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .file-upload-area:hover {
+            border-color: #007bff;
+            background: #e7f3ff;
+        }
+        
+        .range-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 0.25rem;
+        }
+        
+        .character-counter {
+            text-align: right;
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 0.25rem;
+        }
+        
+        /* Problemas de contraste intencionados */
+        .subtle-text {
+            color: #ccc;
+        }
+        
+        .validation-message {
+            margin-top: 0.25rem;
+            font-size: 0.8rem;
+        }
+        
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+        .warning { color: #ffc107; }
+    </style>
+</head>
+
+<body>
+    <!-- PROBLEMA: Falta skip link -->
+    
+    <div class="registration-container">
+        <div class="container">
+            
+            <!-- Navegación de regreso -->
+            <div class="mb-3">
+                <a href="{{ url_for('index') }}" class="btn btn-outline-light">
+                    ← Volver al portal
+                </a>
+            </div>
+            
+            <div class="registration-card">
+                
+                <!-- PROBLEMA: Progreso sin accesibilidad -->
+                <div class="form-progress">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <div style="font-weight: 500; font-size: 1.2rem;">Registro de Usuario</div>
+                        <div style="font-size: 0.9rem; color: #6c757d;">Paso 1 de 1</div>
+                    </div>
+                    <div class="progress-bar-custom">
+                        <div class="progress-fill" style="width: 25%"></div>
+                    </div>
+                    <div style="margin-top: 0.5rem; font-size: 0.8rem; color: #6c757d;">
+                        Completando información personal...
+                    </div>
+                </div>
+                
+                <!-- PROBLEMA: Formulario sin estructura semántica apropiada -->
+                <form id="registrationForm" novalidate style="padding: 0;">
+                    
+                    <!-- Sección 1: Información Personal - MÚLTIPLES PROBLEMAS -->
+                    <div class="form-section">
+                        <!-- PROBLEMA: Sin fieldset para agrupar -->
+                        <div style="font-size: 1.3rem; font-weight: 500; margin-bottom: 1.5rem; color: #007bff;">
+                            📝 Información Personal
+                        </div>
+                        
+                        <div class="row">
+                            <!-- Nombre completo -->
+                            <div class="col-md-6 mb-3">
+                                <!-- PROBLEMA: Label sin asociación correcta -->
+                                <div class="form-label required-field">Nombre completo</div>
+                                <input type="text" 
+                                       class="form-control" 
+                                       name="fullName"
+                                       placeholder="Ingresa tu nombre completo"
+                                       maxlength="100">
+                                <div class="character-counter">0/100 caracteres</div>
+                                <!-- PROBLEMA: Mensaje de ayuda no asociado -->
+                                <div class="field-help">
+                                    Incluye tu nombre y apellidos completos
+                                </div>
+                            </div>
+                            
+                            <!-- Email -->
+                            <div class="col-md-6 mb-3">
+                                <div class="form-label required-field">Correo electrónico</div>
+                                <input type="email" 
+                                       class="form-control" 
+                                       name="email"
+                                       placeholder="tu@email.com"
+                                       autocomplete="email">
+                                <!-- PROBLEMA: Validación en vivo sin accesibilidad -->
+                                <div class="validation-message" style="display: none;"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <!-- Fecha de nacimiento -->
+                            <div class="col-md-4 mb-3">
+                                <div class="form-label required-field">Fecha de nacimiento</div>
+                                <input type="date" 
+                                       class="form-control" 
+                                       name="birthDate"
+                                       max="2006-01-01">
+                                <div class="field-help">
+                                    Debes ser mayor de 18 años para registrarte
+                                </div>
+                            </div>
+                            
+                            <!-- Teléfono -->
+                            <div class="col-md-4 mb-3">
+                                <div class="form-label required-field">Teléfono</div>
+                                <input type="tel" 
+                                       class="form-control" 
+                                       name="phone"
+                                       placeholder="+34 600 000 000"
+                                       autocomplete="tel">
+                                <div class="validation-message" style="display: none;"></div>
+                            </div>
+                            
+                            <!-- País -->
+                            <div class="col-md-4 mb-3">
+                                <!-- PROBLEMA: Select sin label apropiado -->
+                                <div class="form-label required-field">País</div>
+                                <select class="form-select" name="country">
+                                    <!-- PROBLEMA: Opción por defecto no accesible -->
+                                    <option value="">Selecciona tu país</option>
+                                    <option value="ES">España</option>
+                                    <option value="MX">México</option>
+                                    <option value="AR">Argentina</option>
+                                    <option value="CO">Colombia</option>
+                                    <option value="PE">Perú</option>
+                                    <option value="CL">Chile</option>
+                                    <option value="OTHER">Otro</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sección 2: Información Profesional - PROBLEMAS -->
+                    <div class="form-section">
+                        <div style="font-size: 1.3rem; font-weight: 500; margin-bottom: 1.5rem; color: #007bff;">
+                            💼 Información Profesional
+                        </div>
+                        
+                        <div class="row">
+                            <!-- Ocupación -->
+                            <div class="col-md-6 mb-3">
+                                <div class="form-label">Ocupación actual</div>
+                                <input type="text" 
+                                       class="form-control" 
+                                       name="occupation"
+                                       placeholder="Ej: Desarrollador Frontend"
+                                       list="occupationsList">
+                                
+                                <!-- PROBLEMA: Datalist sin accesibilidad -->
+                                <datalist id="occupationsList">
+                                    <option value="Desarrollador Frontend">
+                                    <option value="Desarrollador Backend">
+                                    <option value="Full Stack Developer">
+                                    <option value="DevOps Engineer">
+                                    <option value="UX/UI Designer">
+                                    <option value="Product Manager">
+                                    <option value="Data Scientist">
+                                    <option value="Estudiante">
+                                </datalist>
+                            </div>
+                            
+                            <!-- Experiencia -->
+                            <div class="col-md-6 mb-3">
+                                <div class="form-label">Años de experiencia</div>
+                                <!-- PROBLEMA: Range input sin descripción accesible -->
+                                <input type="range" 
+                                       class="form-range" 
+                                       name="experience"
+                                       min="0" 
+                                       max="20" 
+                                       value="2"
+                                       step="1">
+                                <div class="range-display">
+                                    <span>0 años</span>
+                                    <span id="experienceValue">2 años</span>
+                                    <span>20+ años</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Habilidades técnicas - PROBLEMA: Checkboxes sin estructura -->
+                        <div class="mb-3">
+                            <div class="form-label">Habilidades técnicas</div>
+                            <div class="field-help">Selecciona todas las que apliquen</div>
+                            
+                            <div class="checkbox-group">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <!-- PROBLEMA: Checkboxes sin labels apropiados -->
+                                        <input type="checkbox" name="skills" value="html" style="margin-right: 0.5rem;">
+                                        HTML/CSS
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="checkbox" name="skills" value="javascript" style="margin-right: 0.5rem;">
+                                        JavaScript
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="checkbox" name="skills" value="react" style="margin-right: 0.5rem;">
+                                        React
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="checkbox" name="skills" value="vue" style="margin-right: 0.5rem;">
+                                        Vue.js
+                                    </div>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-md-3">
+                                        <input type="checkbox" name="skills" value="angular" style="margin-right: 0.5rem;">
+                                        Angular
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="checkbox" name="skills" value="nodejs" style="margin-right: 0.5rem;">
+                                        Node.js
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="checkbox" name="skills" value="python" style="margin-right: 0.5rem;">
+                                        Python
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="checkbox" name="skills" value="other" style="margin-right: 0.5rem;">
+                                        Otras
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Salario esperado -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-label">Salario esperado (EUR/año)</div>
+                                <input type="number" 
+                                       class="form-control" 
+                                       name="expectedSalary"
+                                       min="15000" 
+                                       max="150000" 
+                                       step="1000"
+                                       placeholder="45000">
+                                <div class="field-help">Rango entre €15,000 y €150,000</div>
+                            </div>
+                            
+                            <!-- Disponibilidad -->
+                            <div class="col-md-6 mb-3">
+                                <div class="form-label required-field">Disponibilidad para trabajar</div>
+                                <!-- PROBLEMA: Radio buttons sin fieldset -->
+                                <div class="radio-group">
+                                    <div>
+                                        <!-- PROBLEMA: Radio buttons sin labels apropiados -->
+                                        <input type="radio" name="availability" value="immediate" style="margin-right: 0.5rem;">
+                                        Inmediata
+                                    </div>
+                                    <div>
+                                        <input type="radio" name="availability" value="2weeks" style="margin-right: 0.5rem;">
+                                        2 semanas
+                                    </div>
+                                    <div>
+                                        <input type="radio" name="availability" value="1month" style="margin-right: 0.5rem;">
+                                        1 mes
+                                    </div>
+                                    <div>
+                                        <input type="radio" name="availability" value="negotiable" style="margin-right: 0.5rem;">
+                                        Negociable
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sección 3: Preferencias y Configuración - PROBLEMAS -->
+                    <div class="form-section">
+                        <div style="font-size: 1.3rem; font-weight: 500; margin-bottom: 1.5rem; color: #007bff;">
+                            ⚙️ Preferencias y Configuración
+                        </div>
+                        
+                        <div class="row">
+                            <!-- Idioma preferido -->
+                            <div class="col-md-4 mb-3">
+                                <div class="form-label">Idioma preferido</div>
+                                <select class="form-select" name="preferredLanguage">
+                                    <option value="es" selected>Español</option>
+                                    <option value="en">English</option>
+                                    <option value="fr">Français</option>
+                                    <option value="de">Deutsch</option>
+                                    <option value="pt">Português</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Zona horaria -->
+                            <div class="col-md-4 mb-3">
+                                <div class="form-label">Zona horaria</div>
+                                <select class="form-select" name="timezone">
+                                    <option value="">Detectar automáticamente</option>
+                                    <option value="Europe/Madrid">Europa/Madrid (CET)</option>
+                                    <option value="America/Mexico_City">América/Ciudad_de_México</option>
+                                    <option value="America/New_York">América/Nueva_York (EST)</option>
+                                    <option value="America/Los_Angeles">América/Los_Ángeles (PST)</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Tema preferido -->
+                            <div class="col-md-4 mb-3">
+                                <div class="form-label">Tema de interfaz</div>
+                                <!-- PROBLEMA: Radio buttons inline sin estructura -->
+                                <div style="margin-top: 0.5rem;">
+                                    <input type="radio" name="theme" value="light" checked style="margin-right: 0.5rem;">
+                                    Claro
+                                    <input type="radio" name="theme" value="dark" style="margin-left: 1rem; margin-right: 0.5rem;">
+                                    Oscuro
+                                    <input type="radio" name="theme" value="auto" style="margin-left: 1rem; margin-right: 0.5rem;">
+                                    Automático
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Notificaciones - PROBLEMA: Sin fieldset -->
+                        <div class="mb-3">
+                            <div class="form-label">Preferencias de notificaciones</div>
+                            <div class="checkbox-group">
+                                <div class="mb-2">
+                                    <input type="checkbox" name="notifications" value="email" checked style="margin-right: 0.5rem;">
+                                    Recibir notificaciones por email
+                                </div>
+                                <div class="mb-2">
+                                    <input type="checkbox" name="notifications" value="sms" style="margin-right: 0.5rem;">
+                                    Recibir notificaciones por SMS
+                                </div>
+                                <div class="mb-2">
+                                    <input type="checkbox" name="notifications" value="push" checked style="margin-right: 0.5rem;">
+                                    Recibir notificaciones push
+                                </div>
+                                <div class="mb-2">
+                                    <input type="checkbox" name="notifications" value="newsletter" checked style="margin-right: 0.5rem;">
+                                    Suscribirse al newsletter semanal
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Bio/Descripción -->
+                        <div class="mb-3">
+                            <div class="form-label">Biografía o descripción personal</div>
+                            <!-- PROBLEMA: Textarea sin aria-describedby -->
+                            <textarea class="form-control" 
+                                      name="bio"
+                                      rows="4"
+                                      maxlength="500"
+                                      placeholder="Cuéntanos un poco sobre ti, tus intereses profesionales y objetivos..."></textarea>
+                            <div class="character-counter">0/500 caracteres</div>
+                            <div class="field-help">
+                                Esta información aparecerá en tu perfil público
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sección 4: Documentos y Archivos - PROBLEMAS CRÍTICOS -->
+                    <div class="form-section">
+                        <div style="font-size: 1.3rem; font-weight: 500; margin-bottom: 1.5rem; color: #007bff;">
+                            📎 Documentos y Archivos
+                        </div>
+                        
+                        <!-- CV/Currículum -->
+                        <div class="mb-4">
+                            <div class="form-label">Currículum Vitae (CV)</div>
+                            <!-- PROBLEMA: File input sin accesibilidad -->
+                            <div class="file-upload-area" onclick="document.getElementById('cvFile').click()">
+                                <div style="font-size: 2rem; margin-bottom: 1rem;">📄</div>
+                                <div style="font-weight: 500;">Haz clic para subir tu CV</div>
+                                <div class="subtle-text" style="margin-top: 0.5rem;">
+                                    Formatos admitidos: PDF, DOC, DOCX (máx. 5MB)
+                                </div>
+                                <input type="file" 
+                                       id="cvFile"
+                                       name="cv"
+                                       accept=".pdf,.doc,.docx"
+                                       style="display: none;">
+                            </div>
+                            <div class="field-help">
+                                Tu CV nos ayuda a entender mejor tu experiencia profesional
+                            </div>
+                        </div>
+                        
+                        <!-- Foto de perfil -->
+                        <div class="mb-4">
+                            <div class="form-label">Foto de perfil (opcional)</div>
+                            <div class="file-upload-area" onclick="document.getElementById('profilePhoto').click()">
+                                <div style="font-size: 2rem; margin-bottom: 1rem;">📷</div>
+                                <div style="font-weight: 500;">Subir foto de perfil</div>
+                                <div class="subtle-text" style="margin-top: 0.5rem;">
+                                    JPG, PNG (máx. 2MB, recomendado: 400x400px)
+                                </div>
+                                <!-- PROBLEMA: File input sin aria-describedby -->
+                                <input type="file" 
+                                       id="profilePhoto"
+                                       name="profilePhoto"
+                                       accept="image/*"
+                                       style="display: none;">
+                            </div>
+                        </div>
+                        
+                        <!-- Portfolio/Enlaces -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-label">Portfolio web</div>
+                                <input type="url" 
+                                       class="form-control" 
+                                       name="portfolio"
+                                       placeholder="https://tu-portfolio.com">
+                                <div class="field-help">
+                                    Enlace a tu portfolio o sitio web personal
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <div class="form-label">Perfil de LinkedIn</div>
+                                <input type="url" 
+                                       class="form-control" 
+                                       name="linkedin"
+                                       placeholder="https://linkedin.com/in/tu-perfil">
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-label">GitHub/GitLab</div>
+                                <input type="url" 
+                                       class="form-control" 
+                                       name="github"
+                                       placeholder="https://github.com/tu-usuario">
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <div class="form-label">Otro enlace relevante</div>
+                                <input type="url" 
+                                       class="form-control" 
+                                       name="otherLink"
+                                       placeholder="https://...">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sección 5: Términos y Confirmación - PROBLEMAS -->
+                    <div class="form-section">
+                        <div style="font-size: 1.3rem; font-weight: 500; margin-bottom: 1.5rem; color: #007bff;">
+                            ✅ Confirmación y Términos
+                        </div>
+                        
+                        <!-- PROBLEMA: Checkboxes legales sin fieldset -->
+                        <div class="mb-3">
+                            <div class="checkbox-group">
+                                <div class="mb-3">
+                                    <!-- PROBLEMA: Checkbox requerido sin indicación -->
+                                    <input type="checkbox" name="agreeTerms" required style="margin-right: 0.5rem;">
+                                    <span>
+                                        Acepto los 
+                                        <!-- PROBLEMA: Links sin indicar nueva ventana -->
+                                        <a href="#" target="_blank">términos y condiciones de uso</a> 
+                                        del servicio
+                                    </span>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <input type="checkbox" name="agreePrivacy" required style="margin-right: 0.5rem;">
+                                    <span>
+                                        He leído y acepto la 
+                                        <a href="#" target="_blank">política de privacidad</a>
+                                    </span>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <input type="checkbox" name="agreeMarketing" style="margin-right: 0.5rem;">
+                                    <span>
+                                        Acepto recibir comunicaciones comerciales y marketing 
+                                        (opcional)
+                                    </span>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <input type="checkbox" name="confirmAge" required style="margin-right: 0.5rem;">
+                                    <span>
+                                        Confirmo que soy mayor de 18 años
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Verificación final -->
+                        <div class="mb-4 p-3" style="background: #f8f9fa; border-radius: 8px; border-left: 4px solid #007bff;">
+                            <div style="font-weight: 500; margin-bottom: 0.5rem;">
+                                ⚠️ Verificación final
+                            </div>
+                            <div style="font-size: 0.9rem;">
+                                Por favor, revisa todos los datos ingresados antes de enviar el formulario. 
+                                Una vez registrado, algunos campos no podrán modificarse.
+                            </div>
+                        </div>
+                        
+                        <!-- Botones de acción - PROBLEMA -->
+                        <div style="display: flex; gap: 1rem; justify-content: end;">
+                            <button type="button" class="btn btn-outline-secondary">
+                                Limpiar formulario
+                            </button>
+                            <button type="button" class="btn btn-secondary">
+                                Guardar como borrador
+                            </button>
+                            <!-- PROBLEMA: Botón submit sin indicar proceso -->
+                            <button type="submit" class="btn btn-primary">
+                                Completar registro
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- PROBLEMA: Loading overlay sin accesibilidad -->
+    <div id="submitOverlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 9999;">
+        <div style="background: white; padding: 2rem; border-radius: 10px; text-align: center;">
+            <div class="spinner-border text-primary mb-3"></div>
+            <div>Procesando registro...</div>
+            <div style="font-size: 0.8rem; color: #6c757d; margin-top: 0.5rem;">
+                Esto puede tomar unos segundos
+            </div>
+        </div>
+    </div>
+    
+    <!-- PROBLEMA: Mensajes no accesibles -->
+    <div id="messageArea" style="position: fixed; top: 20px; right: 20px; z-index: 10000; max-width: 400px;"></div>
+    
+    <script src="{{ url_for('static', filename='js/portal.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // PROBLEMAS INTENCIONADOS EN EL JAVASCRIPT
+        
+        let formProgress = 25;
+        let isSubmitting = false;
+        
+        // PROBLEMA: Contador de caracteres sin accesibilidad
+        function updateCharacterCounter(input, maxLength) {
+            const counter = input.parentNode.querySelector('.character-counter');
+            if (counter) {
+                const currentLength = input.value.length;
+                counter.textContent = `${currentLength}/${maxLength} caracteres`;
+                
+                // PROBLEMA: No anuncia cuando se acerca al límite
+                if (currentLength >= maxLength * 0.9) {
+                    counter.style.color = '#dc3545';
+                } else {
+                    counter.style.color = '#6c757d';
+                }
+            }
+        }
+        
+        // PROBLEMA: Validación de email sin feedback accesible
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+        
+        // PROBLEMA: Validación en tiempo real problemática
+        function showFieldValidation(fieldName, isValid, message) {
+            const field = document.querySelector(`[name="${fieldName}"]`);
+            const validationDiv = field.parentNode.querySelector('.validation-message');
+            
+            if (validationDiv) {
+                validationDiv.style.display = 'block';
+                validationDiv.className = `validation-message ${isValid ? 'success' : 'error'}`;
+                validationDiv.textContent = message;
+                
+                // PROBLEMA: No usa aria-invalid
+                // PROBLEMA: No asocia el mensaje con el campo
+            }
+        }
+        
+        // PROBLEMA: Actualizar progreso sin accesibilidad
+        function updateProgress(percentage) {
+            const progressBar = document.querySelector('.progress-fill');
+            progressBar.style.width = percentage + '%';
+            
+            // PROBLEMA: No anuncia el cambio de progreso
+        }
+        
+        // PROBLEMA: Manejo de archivos sin accesibilidad
+        function handleFileUpload(input, maxSize) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            const uploadArea = input.parentNode;
+            
+            if (file.size > maxSize) {
+                // PROBLEMA: Error no accesible
+                alert('El archivo es muy grande');
+                input.value = '';
+                return;
+            }
+            
+            // PROBLEMA: Cambio visual sin anuncio
+            uploadArea.style.background = '#d4edda';
+            uploadArea.querySelector('div').innerHTML = `✅ ${file.name}`;
+        }
+        
+        // PROBLEMA: Mostrar mensajes no accesibles
+        function showMessage(message, type = 'success') {
+            const messageArea = document.getElementById('messageArea');
+            const messageDiv = document.createElement('div');
+            
+            messageDiv.className = `alert alert-${type} alert-dismissible`;
+            messageDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+            `;
+            
+            messageArea.appendChild(messageDiv);
+            
+            // PROBLEMA: No se anuncia a lectores de pantalla
+            
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 5000);
+        }
+        
+        // Configuración del formulario - MÚLTIPLES PROBLEMAS
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('registrationForm');
+            
+            // PROBLEMA: Listeners sin manejo de accesibilidad
+            
+            // Contadores de caracteres
+            document.querySelectorAll('input[maxlength], textarea[maxlength]').forEach(input => {
+                const maxLength = input.getAttribute('maxlength');
+                updateCharacterCounter(input, maxLength);
+                
+                input.addEventListener('input', () => {
+                    updateCharacterCounter(input, maxLength);
+                });
+            });
+            
+            // Validación de email en tiempo real - PROBLEMÁTICA
+            const emailField = document.querySelector('[name="email"]');
+            emailField.addEventListener('blur', function() {
+                const isValid = validateEmail(this.value);
+                if (this.value) {
+                    showFieldValidation('email', isValid, 
+                        isValid ? 'Email válido' : 'Formato de email incorrecto');
+                }
+            });
+            
+            // Range slider - PROBLEMA: Sin descripción accesible
+            const experienceRange = document.querySelector('[name="experience"]');
+            const experienceValue = document.getElementById('experienceValue');
+            
+            experienceRange.addEventListener('input', function() {
+                experienceValue.textContent = `${this.value} años`;
+                // PROBLEMA: No anuncia el cambio de valor
+            });
+            
+            // File inputs - PROBLEMAS DE ACCESIBILIDAD
+            document.getElementById('cvFile').addEventListener('change', function() {
+                handleFileUpload(this, 5 * 1024 * 1024); // 5MB
+            });
+            
+            document.getElementById('profilePhoto').addEventListener('change', function() {
+                handleFileUpload(this, 2 * 1024 * 1024); // 2MB
+            });
+            
+            // Envío del formulario - MÚLTIPLES PROBLEMAS
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                if (isSubmitting) return;
+                
+                // PROBLEMA: Validación básica sin accesibilidad
+                const requiredFields = form.querySelectorAll('[required], .required-field ~ input, .required-field ~ select');
+                let hasErrors = false;
+                
+                requiredFields.forEach(field => {
+                    if (!field.value.trim()) {
+                        // PROBLEMA: Error no accesible
+                        field.style.borderColor = '#dc3545';
+                        hasErrors = true;
+                    } else {
+                        field.style.borderColor = '';
+                    }
+                });
+                
+                if (hasErrors) {
+                    // PROBLEMA: No enfoca el primer error
+                    showMessage('Por favor completa todos los campos requeridos', 'danger');
+                    return;
+                }
+                
+                // PROBLEMA: Loading sin accesibilidad
+                isSubmitting = true;
+                document.getElementById('submitOverlay').style.display = 'flex';
+                
+                // Simular envío
+                setTimeout(() => {
+                    document.getElementById('submitOverlay').style.display = 'none';
+                    isSubmitting = false;
+                    
+                    if (Math.random() > 0.2) {
+                        showMessage('¡Registro completado exitosamente! Te hemos enviado un email de confirmación.', 'success');
+                        setTimeout(() => {
+                            window.location.href = '/';
+                        }, 3000);
+                    } else {
+                        showMessage('Error al procesar el registro. Inténtalo de nuevo.', 'danger');
+                    }
+                }, 3000);
+            });
+            
+            // PROBLEMA: Botones sin manejo de teclado apropiado
+            document.querySelector('.btn-outline-secondary').addEventListener('click', function() {
+                if (confirm('¿Estás seguro de que quieres limpiar el formulario?')) {
+                    form.reset();
+                    // PROBLEMA: No anuncia que se limpió
+                }
+            });
+        });
+    </script>
+    
+</body>
+</html>
+
+<!--
+PROBLEMAS CRÍTICOS DE ACCESIBILIDAD PARA CORREGIR:
+
+ESTRUCTURA DE FORMULARIO:
+1. ✗ Falta fieldset/legend para agrupar secciones relacionadas
+2. ✗ Labels no asociados correctamente (sin for/id)
+3. ✗ Campos requeridos sin aria-required
+4. ✗ Mensajes de ayuda sin aria-describedby
+5. ✗ Validaciones sin aria-invalid
+
+GRUPOS DE CAMPOS:
+6. ✗ Radio buttons sin fieldset/legend
+7. ✗ Checkboxes sin fieldset para agrupar opciones relacionadas
+8. ✗ Grupo de habilidades sin estructura semántica
+
+ELEMENTOS COMPLEJOS:
+9. ✗ Range input sin aria-valuetext descriptivo
+10. ✗ File inputs sin accesibilidad (ocultos con divs clickeables)
+11. ✗ Datalist sin aria-describedby
+12. ✗ Select options por defecto problemáticas
+
+FEEDBACK Y VALIDACIÓN:
+13. ✗ Mensajes de error no asociados con campos
+14. ✗ Validación en tiempo real sin aria-live
+15. ✗ Contadores de caracteres no anunciados
+16. ✗ Estados de validación sin aria-invalid
+17. ✗ Progreso del formulario no accesible
+
+CONTENIDO DINÁMICO:
+18. ✗ Subida de archivos sin feedback accesible
+19. ✗ Cambios de estado no anunciados
+20. ✗ Loading overlay sin manejo de foco
+21. ✗ Mensajes de éxito/error no anunciados
+
+NAVEGACIÓN Y INTERACCIÓN:
+22. ✗ Campos obligatorios no claramente identificados
+23. ✗ Enlaces externos sin indicación
+24. ✗ Botones de acción sin descripción de proceso
+25. ✗ Falta navegación con teclado entre secciones
+
+INFORMACIÓN CONTEXTUAL:
+26. ✗ Ayudas contextuales no asociadas
+27. ✗ Restricciones de formato sin describir
+28. ✗ Límites de archivos no accesibles
+29. ✗ Términos legales sin estructura apropiada
+
+PROBLEMAS TÉCNICOS:
+30. ✗ Contraste insuficiente en textos secundarios
+31. ✗ Focus no visible en elementos custom
+32. ✗ Skip links ausentes para navegación
+33. ✗ Roles ARIA faltantes para elementos complejos
+
+El equipo debe implementar:
+- fieldset/legend para agrupar campos relacionados
+- Asociaciones correctas label/input (for/id)
+- aria-required para campos obligatorios
+- aria-describedby para mensajes de ayuda y error
+- aria-invalid para estados de validación
+- aria-live regions para feedback dinámico
+- aria-valuetext para ranges
+- Alternativas accesibles para file uploads
+- Manejo apropiado de foco
+- Anuncios de cambios de estado
+- Navegación con teclado mejorada
+- Indicadores claros de campos requeridos
+-->

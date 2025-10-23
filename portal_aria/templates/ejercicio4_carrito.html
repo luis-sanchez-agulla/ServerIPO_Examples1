@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ titulo }}</title>
+    <meta name="description" content="{{ descripcion }}">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        .shop-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+        }
+        
+        .product-card {
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            background: white;
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        .price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #007bff;
+        }
+        
+        .cart-sidebar {
+            position: fixed;
+            right: -400px;
+            top: 0;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            z-index: 1050;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        
+        .cart-sidebar.open {
+            right: 0;
+        }
+        
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1040;
+            display: none;
+        }
+        
+        .cart-overlay.show {
+            display: block;
+        }
+        
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #e9ecef;
+            gap: 1rem;
+        }
+        
+        .cart-item-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        
+        .cart-item-details {
+            flex: 1;
+        }
+        
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #dee2e6;
+            background: white;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .quantity-input {
+            width: 50px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+            border-radius: 3px;
+            padding: 0.25rem;
+        }
+        
+        .cart-summary {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+        
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #dc3545;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .loading-product {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        
+        .success-animation {
+            animation: successPulse 0.6s ease;
+        }
+        
+        @keyframes successPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        /* PROBLEMAS INTENCIONADOS */
+        .product-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            margin-top: 1rem;
+        }
+        
+        .btn-add-cart {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .btn-add-cart:hover {
+            background: #218838;
+        }
+        
+        .btn-add-cart:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+        
+        .stock-info {
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        .stock-low { color: #ffc107; }
+        .stock-out { color: #dc3545; }
+        .stock-ok { color: #28a745; }
+    </style>
+</head>
+
+<body>
+    <!-- PROBLEMA: Falta skip links -->
+    
+    <!-- Header de la tienda -->
+    <header class="shop-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1>TechShop</h1>
+                    <p class="mb-0">Los mejores productos tecnológicos</p>
+                </div>
+                
+                <!-- PROBLEMA: Carrito sin información accesible -->
+                <div style="position: relative;">
+                    <button onclick="toggleCart()" class="btn btn-light btn-lg">
+                        🛒 Carrito
+                        <!-- PROBLEMA: Badge sin descripción -->
+                        <span id="cartBadge" class="cart-badge" style="display: none;">0</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Navegación de regreso -->
+            <div class="mt-3">
+                <a href="{{ url_for('index') }}" class="btn btn-outline-light">
+                    ← Volver al portal
+                </a>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Contenido principal -->
+    <div class="container my-5">
+        
+        <!-- Filtros y búsqueda - PROBLEMAS -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <!-- PROBLEMA: Campo de búsqueda sin label -->
+                <input type="text" 
+                       class="form-control" 
+                       placeholder="Buscar productos..." 
+                       onkeyup="filterProducts(this.value)">
+            </div>
+            
+            <div class="col-md-3">
+                <!-- PROBLEMA: Select sin label -->
+                <select class="form-select" onchange="sortProducts(this.value)">
+                    <option value="">Ordenar por...</option>
+                    <option value="name">Nombre</option>
+                    <option value="price-low">Precio: Menor a Mayor</option>
+                    <option value="price-high">Precio: Mayor a Menor</option>
+                    <option value="rating">Calificación</option>
+                </select>
+            </div>
+            
+            <div class="col-md-3">
+                <select class="form-select" onchange="filterByCategory(this.value)">
+                    <option value="">Todas las categorías</option>
+                    <option value="laptops">Laptops</option>
+                    <option value="phones">Teléfonos</option>
+                    <option value="accessories">Accesorios</option>
+                    <option value="software">Software</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Grid de productos - MÚLTIPLES PROBLEMAS -->
+        <div class="row" id="productsGrid">
+            
+            <!-- Producto 1 -->
+            <div class="col-lg-4 col-md-6 product-item" data-category="laptops">
+                <!-- PROBLEMA: Producto sin estructura semántica -->
+                <div class="product-card">
+                    <!-- PROBLEMA: Imagen sin alt text descriptivo -->
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect width='300' height='200' fill='%23e9ecef'/%3E%3Ctext x='150' y='100' text-anchor='middle' fill='%23495057' font-size='14'%3ELaptop Gaming%3C/text%3E%3C/svg%3E" 
+                         class="product-image">
+                    
+                    <!-- PROBLEMA: Encabezado sin nivel apropiado -->
+                    <div style="font-size: 1.3rem; font-weight: bold; margin-bottom: 0.5rem;">
+                        Laptop Gaming Pro X1
+                    </div>
+                    
+                    <div class="product-description">
+                        Intel i7, 16GB RAM, RTX 3070, SSD 1TB. Perfecta para gaming y trabajo profesional.
+                    </div>
+                    
+                    <!-- PROBLEMA: Calificación sin accesibilidad -->
+                    <div style="margin: 1rem 0;">
+                        <span>⭐⭐⭐⭐⭐</span>
+                        <span style="color: #6c757d; margin-left: 0.5rem;">(47 reseñas)</span>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="price">€1,299.99</span>
+                        <!-- PROBLEMA: Stock sin información accesible -->
+                        <span class="stock-info stock-ok">✅ En stock (12 unidades)</span>
+                    </div>
+                    
+                    <div class="product-actions">
+                        <!-- PROBLEMA: Botón sin descripción de acción -->
+                        <button class="btn-add-cart" 
+                                onclick="addToCart('laptop-1', 'Laptop Gaming Pro X1', 1299.99)"
+                                data-product-id="laptop-1">
+                            Añadir al carrito
+                        </button>
+                        
+                        <!-- PROBLEMA: Selector de cantidad sin label -->
+                        <select style="width: 80px; margin-left: 0.5rem;" 
+                                onchange="updateQuantitySelection('laptop-1', this.value)">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                        
+                        <!-- PROBLEMA: Botón favorito sin descripción -->
+                        <button onclick="toggleFavorite('laptop-1')" 
+                                style="background: none; border: none; font-size: 1.5rem;">
+                            🤍
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Producto 2 -->
+            <div class="col-lg-4 col-md-6 product-item" data-category="phones">
+                <div class="product-card">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect width='300' height='200' fill='%23e9ecef'/%3E%3Ctext x='150' y='100' text-anchor='middle' fill='%23495057' font-size='14'%3ESmartphone%3C/text%3E%3C/svg%3E" 
+                         class="product-image" alt="Smartphone">
+                    
+                    <div style="font-size: 1.3rem; font-weight: bold; margin-bottom: 0.5rem;">
+                        Smartphone Ultra 5G
+                    </div>
+                    
+                    <div class="product-description">
+                        Pantalla OLED 6.7", Cámara triple 108MP, Batería 5000mAh, 256GB almacenamiento.
+                    </div>
+                    
+                    <div style="margin: 1rem 0;">
+                        <span>⭐⭐⭐⭐☆</span>
+                        <span style="color: #6c757d; margin-left: 0.5rem;">(32 reseñas)</span>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="price">€899.99</span>
+                        <span class="stock-info stock-low">⚠️ Pocas unidades (3 restantes)</span>
+                    </div>
+                    
+                    <div class="product-actions">
+                        <button class="btn-add-cart" 
+                                onclick="addToCart('phone-1', 'Smartphone Ultra 5G', 899.99)"
+                                data-product-id="phone-1">
+                            Añadir al carrito
+                        </button>
+                        
+                        <select style="width: 80px; margin-left: 0.5rem;" 
+                                onchange="updateQuantitySelection('phone-1', this.value)">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                        
+                        <button onclick="toggleFavorite('phone-1')" 
+                                style="background: none; border: none; font-size: 1.5rem;">
+                            🤍
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Producto 3 -->
+            <div class="col-lg-4 col-md-6 product-item" data-category="accessories">
+                <div class="product-card">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect width='300' height='200' fill='%23e9ecef'/%3E%3Ctext x='150' y='100' text-anchor='middle' fill='%23495057' font-size='14'%3EAuriculares%3C/text%3E%3C/svg%3E" 
+                         class="product-image">
+                    
+                    <div style="font-size: 1.3rem; font-weight: bold; margin-bottom: 0.5rem;">
+                        Auriculares Wireless Pro
+                    </div>
+                    
+                    <div class="product-description">
+                        Cancelación de ruido activa, 30h de batería, Bluetooth 5.2, resistentes al agua IPX4.
+                    </div>
+                    
+                    <div style="margin: 1rem 0;">
+                        <span>⭐⭐⭐⭐⭐</span>
+                        <span style="color: #6c757d; margin-left: 0.5rem;">(89 reseñas)</span>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="price">€199.99</span>
+                        <span class="stock-info stock-ok">✅ En stock (25 unidades)</span>
+                    </div>
+                    
+                    <div class="product-actions">
+                        <button class="btn-add-cart" 
+                                onclick="addToCart('headphones-1', 'Auriculares Wireless Pro', 199.99)"
+                                data-product-id="headphones-1">
+                            Añadir al carrito
+                        </button>
+                        
+                        <select style="width: 80px; margin-left: 0.5rem;" 
+                                onchange="updateQuantitySelection('headphones-1', this.value)">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                        
+                        <button onclick="toggleFavorite('headphones-1')" 
+                                style="background: none; border: none; font-size: 1.5rem;">
+                            🤍
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Producto 4 - AGOTADO -->
+            <div class="col-lg-4 col-md-6 product-item" data-category="software">
+                <div class="product-card">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect width='300' height='200' fill='%23e9ecef'/%3E%3Ctext x='150' y='100' text-anchor='middle' fill='%23495057' font-size='14'%3ESoftware%3C/text%3E%3C/svg%3E" 
+                         class="product-image">
+                    
+                    <div style="font-size: 1.3rem; font-weight: bold; margin-bottom: 0.5rem;">
+                        Suite Productividad Pro
+                    </div>
+                    
+                    <div class="product-description">
+                        Licencia completa: Editor de documentos, hojas de cálculo, presentaciones y más herramientas.
+                    </div>
+                    
+                    <div style="margin: 1rem 0;">
+                        <span>⭐⭐⭐⭐☆</span>
+                        <span style="color: #6c757d; margin-left: 0.5rem;">(156 reseñas)</span>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="price">€149.99</span>
+                        <!-- PROBLEMA: Estado agotado sin información accesible -->
+                        <span class="stock-info stock-out">❌ Agotado</span>
+                    </div>
+                    
+                    <div class="product-actions">
+                        <!-- PROBLEMA: Botón deshabilitado sin explicación -->
+                        <button class="btn-add-cart" 
+                                disabled
+                                data-product-id="software-1">
+                            No disponible
+                        </button>
+                        
+                        <!-- PROBLEMA: Botón notificar sin descripción -->
+                        <button style="background: #007bff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; margin-left: 0.5rem;"
+                                onclick="notifyWhenAvailable('software-1')">
+                            Notificar disponibilidad
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Más productos similares... -->
+            <div class="col-lg-4 col-md-6 product-item" data-category="accessories">
+                <div class="product-card">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect width='300' height='200' fill='%23e9ecef'/%3E%3Ctext x='150' y='100' text-anchor='middle' fill='%23495057' font-size='14'%3ETeclado%3C/text%3E%3C/svg%3E" 
+                         class="product-image">
+                    
+                    <div style="font-size: 1.3rem; font-weight: bold; margin-bottom: 0.5rem;">
+                        Teclado Mecánico RGB
+                    </div>
+                    
+                    <div class="product-description">
+                        Switches Cherry MX, Retroiluminación RGB personalizable, Construcción aluminio premium.
+                    </div>
+                    
+                    <div style="margin: 1rem 0;">
+                        <span>⭐⭐⭐⭐⭐</span>
+                        <span style="color: #6c757d; margin-left: 0.5rem;">(73 reseñas)</span>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="price">€129.99</span>
+                        <span class="stock-info stock-ok">✅ En stock (18 unidades)</span>
+                    </div>
+                    
+                    <div class="product-actions">
+                        <button class="btn-add-cart" 
+                                onclick="addToCart('keyboard-1', 'Teclado Mecánico RGB', 129.99)"
+                                data-product-id="keyboard-1">
+                            Añadir al carrito
+                        </button>
+                        
+                        <select style="width: 80px; margin-left: 0.5rem;" 
+                                onchange="updateQuantitySelection('keyboard-1', this.value)">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                        </select>
+                        
+                        <button onclick="toggleFavorite('keyboard-1')" 
+                                style="background: none; border: none; font-size: 1.5rem;">
+                            🤍
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 product-item" data-category="accessories">
+                <div class="product-card">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect width='300' height='200' fill='%23e9ecef'/%3E%3Ctext x='150' y='100' text-anchor='middle' fill='%23495057' font-size='14'%3EMouse%3C/text%3E%3C/svg%3E" 
+                         class="product-image">
+                    
+                    <div style="font-size: 1.3rem; font-weight: bold; margin-bottom: 0.5rem;">
+                        Mouse Gaming Precision
+                    </div>
+                    
+                    <div class="product-description">
+                        16,000 DPI, 11 botones programables, Ergonomía avanzada, Sensor óptico de alta precisión.
+                    </div>
+                    
+                    <div style="margin: 1rem 0;">
+                        <span>⭐⭐⭐⭐☆</span>
+                        <span style="color: #6c757d; margin-left: 0.5rem;">(41 reseñas)</span>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="price">€79.99</span>
+                        <span class="stock-info stock-low">⚠️ Últimas unidades (2 restantes)</span>
+                    </div>
+                    
+                    <div class="product-actions">
+                        <button class="btn-add-cart" 
+                                onclick="addToCart('mouse-1', 'Mouse Gaming Precision', 79.99)"
+                                data-product-id="mouse-1">
+                            Añadir al carrito
+                        </button>
+                        
+                        <select style="width: 80px; margin-left: 0.5rem;" 
+                                onchange="updateQuantitySelection('mouse-1', this.value)">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                        </select>
+                        
+                        <button onclick="toggleFavorite('mouse-1')" 
+                                style="background: none; border: none; font-size: 1.5rem;">
+                            🤍
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mensaje cuando no hay productos - PROBLEMA -->
+        <div id="noProductsMessage" style="display: none; text-align: center; padding: 3rem; color: #6c757d;">
+            <div style="font-size: 4rem; margin-bottom: 1rem;">🔍</div>
+            <div style="font-size: 1.2rem; font-weight: 500;">No se encontraron productos</div>
+            <div>Intenta con otros términos de búsqueda o filtros</div>
+        </div>
+    </div>
+    
+    <!-- PROBLEMA: Carrito lateral sin accesibilidad -->
+    <div class="cart-overlay" onclick="toggleCart()"></div>
+    
+    <div class="cart-sidebar" id="cartSidebar">
+        <!-- PROBLEMA: Header sin estructura -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 2px solid #e9ecef; padding-bottom: 1rem;">
+            <div style="font-size: 1.5rem; font-weight: bold;">
+                🛒 Tu Carrito
+            </div>
+            <!-- PROBLEMA: Botón cerrar sin aria-label -->
+            <button onclick="toggleCart()" 
+                    style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">
+                ✕
+            </button>
+        </div>
+        
+        <!-- Lista de productos en el carrito - PROBLEMAS -->
+        <div id="cartItems">
+            <!-- PROBLEMA: Mensaje de carrito vacío sin role apropiado -->
+            <div id="emptyCartMessage" style="text-align: center; padding: 2rem; color: #6c757d;">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">🛒</div>
+                <div style="font-size: 1.1rem; margin-bottom: 0.5rem;">Tu carrito está vacío</div>
+                <div>¡Añade algunos productos para comenzar!</div>
+            </div>
+        </div>
+        
+        <!-- Resumen del carrito - PROBLEMAS -->
+        <div id="cartSummarySection" style="display: none;">
+            <div class="cart-summary">
+                <!-- PROBLEMA: Resumen sin estructura semántica -->
+                <div style="font-weight: bold; margin-bottom: 1rem; font-size: 1.2rem;">
+                    Resumen del pedido
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span>Subtotal:</span>
+                    <!-- PROBLEMA: Precio sin formato accesible -->
+                    <span id="subtotal">€0.00</span>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span>Envío:</span>
+                    <span id="shipping">€9.99</span>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span>Impuestos:</span>
+                    <span id="taxes">€0.00</span>
+                </div>
+                
+                <hr>
+                
+                <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.2rem;">
+                    <span>Total:</span>
+                    <span id="total">€0.00</span>
+                </div>
+                
+                <!-- PROBLEMA: Botones de acción sin descripción -->
+                <div style="margin-top: 1.5rem; gap: 0.5rem; display: flex; flex-direction: column;">
+                    <button onclick="proceedToCheckout()" 
+                            class="btn btn-primary btn-lg">
+                        Proceder al pago
+                    </button>
+                    
+                    <button onclick="clearCart()" 
+                            class="btn btn-outline-danger">
+                        Vaciar carrito
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- PROBLEMA: Notificaciones no accesibles -->
+    <div id="notifications" style="position: fixed; top: 20px; right: 20px; z-index: 9999; max-width: 400px;"></div>
+    
+    <script src="{{ url_for('static', filename='js/portal.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // PROBLEMAS INTENCIONADOS EN JAVASCRIPT
+        
+        // Estado del carrito - PROBLEMA: Sin accesibilidad
+        let cartItems = [];
+        let cartTotal = 0;
+        let isCartOpen = false;
+        let selectedQuantities = {};
+        
+        // PROBLEMA: Función añadir al carrito sin feedback accesible
+        function addToCart(productId, productName, price) {
+            const quantity = selectedQuantities[productId] || 1;
+            const button = document.querySelector(`[data-product-id="${productId}"]`);
+            
+            // PROBLEMA: Loading state no accesible
+            button.classList.add('loading-product');
+            button.textContent = 'Añadiendo...';
+            button.disabled = true;
+            
+            // Simular delay de red
+            setTimeout(() => {
+                // Buscar si el producto ya existe en el carrito
+                const existingItem = cartItems.find(item => item.id === productId);
+                
+                if (existingItem) {
+                    existingItem.quantity += quantity;
+                } else {
+                    cartItems.push({
+                        id: productId,
+                        name: productName,
+                        price: price,
+                        quantity: quantity
+                    });
+                }
+                
+                // PROBLEMA: Cambios no anunciados a lectores de pantalla
+                updateCartUI();
+                showNotification(`${productName} añadido al carrito`, 'success');
+                
+                // PROBLEMA: Animación sin alternativa para usuarios con vestibular disorders
+                button.classList.add('success-animation');
+                
+                button.classList.remove('loading-product');
+                button.textContent = 'Añadir al carrito';
+                button.disabled = false;
+                
+                setTimeout(() => {
+                    button.classList.remove('success-animation');
+                }, 600);
+                
+            }, 800);
+        }
+        
+        // PROBLEMA: Actualizar UI sin accesibilidad
+        function updateCartUI() {
+            const cartBadge = document.getElementById('cartBadge');
+            const cartItemsContainer = document.getElementById('cartItems');
+            const emptyMessage = document.getElementById('emptyCartMessage');
+            const summarySection = document.getElementById('cartSummarySection');
+            
+            const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+            const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            // PROBLEMA: Badge count sin descripción accesible
+            if (totalItems > 0) {
+                cartBadge.style.display = 'flex';
+                cartBadge.textContent = totalItems;
+            } else {
+                cartBadge.style.display = 'none';
+            }
+            
+            // PROBLEMA: Generación dinámica sin accesibilidad
+            if (cartItems.length === 0) {
+                emptyMessage.style.display = 'block';
+                summarySection.style.display = 'none';
+                cartItemsContainer.innerHTML = emptyMessage.outerHTML;
+            } else {
+                emptyMessage.style.display = 'none';
+                summarySection.style.display = 'block';
+                
+                // PROBLEMA: HTML generado dinámicamente sin estructura accesible
+                const itemsHTML = cartItems.map(item => `
+                    <div class="cart-item">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Crect width='60' height='60' fill='%23e9ecef'/%3E%3C/svg%3E" 
+                             class="cart-item-image">
+                        <div class="cart-item-details">
+                            <div style="font-weight: 500;">${item.name}</div>
+                            <div style="color: #6c757d; font-size: 0.9rem;">€${item.price.toFixed(2)} c/u</div>
+                        </div>
+                        <div class="quantity-controls">
+                            <button class="quantity-btn" onclick="updateCartItemQuantity('${item.id}', ${item.quantity - 1})">-</button>
+                            <input type="text" class="quantity-input" value="${item.quantity}" readonly>
+                            <button class="quantity-btn" onclick="updateCartItemQuantity('${item.id}', ${item.quantity + 1})">+</button>
+                        </div>
+                        <button onclick="removeFromCart('${item.id}')" style="background: none; border: none; color: #dc3545; cursor: pointer; font-size: 1.2rem;">🗑️</button>
+                    </div>
+                `).join('');
+                
+                cartItemsContainer.innerHTML = itemsHTML;
+                
+                // PROBLEMA: Cálculos sin anuncio de cambios
+                const shipping = subtotal > 50 ? 0 : 9.99;
+                const taxes = subtotal * 0.21;
+                const total = subtotal + shipping + taxes;
+                
+                document.getElementById('subtotal').textContent = `€${subtotal.toFixed(2)}`;
+                document.getElementById('shipping').textContent = shipping === 0 ? 'Gratis' : `€${shipping.toFixed(2)}`;
+                document.getElementById('taxes').textContent = `€${taxes.toFixed(2)}`;
+                document.getElementById('total').textContent = `€${total.toFixed(2)}`;
+            }
+        }
+        
+        // PROBLEMA: Actualizar cantidad sin feedback accesible
+        function updateCartItemQuantity(productId, newQuantity) {
+            if (newQuantity <= 0) {
+                removeFromCart(productId);
+                return;
+            }
+            
+            const item = cartItems.find(item => item.id === productId);
+            if (item) {
+                const oldQuantity = item.quantity;
+                item.quantity = newQuantity;
+                
+                // PROBLEMA: Cambio no anunciado
+                updateCartUI();
+                
+                // PROBLEMA: No indica qué cambió específicamente
+                if (newQuantity > oldQuantity) {
+                    console.log(`Cantidad aumentada para ${item.name}`);
+                } else {
+                    console.log(`Cantidad reducida para ${item.name}`);
+                }
+            }
+        }
+        
+        // PROBLEMA: Eliminar producto sin confirmación accesible
+        function removeFromCart(productId) {
+            const itemIndex = cartItems.findIndex(item => item.id === productId);
+            
+            if (itemIndex > -1) {
+                const removedItem = cartItems[itemIndex];
+                cartItems.splice(itemIndex, 1);
+                
+                updateCartUI();
+                showNotification(`${removedItem.name} eliminado del carrito`, 'info');
+                
+                // PROBLEMA: No enfoca elemento apropiado después de eliminar
+            }
+        }
+        
+        // PROBLEMA: Toggle carrito sin manejo de foco
+        function toggleCart() {
+            const cartSidebar = document.getElementById('cartSidebar');
+            const cartOverlay = document.querySelector('.cart-overlay');
+            
+            isCartOpen = !isCartOpen;
+            
+            if (isCartOpen) {
+                cartSidebar.classList.add('open');
+                cartOverlay.classList.add('show');
+                
+                // PROBLEMA: No mueve el foco al carrito
+                // PROBLEMA: No bloquea navegación con teclado en contenido de fondo
+            } else {
+                cartSidebar.classList.remove('open');
+                cartOverlay.classList.remove('show');
+                
+                // PROBLEMA: No restaura el foco al botón que abrió el carrito
+            }
+        }
+        
+        // PROBLEMA: Notificaciones no accesibles
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type} alert-dismissible`;
+            notification.style.marginBottom = '0.5rem';
+            
+            notification.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+            `;
+            
+            document.getElementById('notifications').appendChild(notification);
+            
+            // PROBLEMA: No se anuncia a lectores de pantalla
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 4000);
+        }
+        
+        // PROBLEMA: Filtrado sin feedback accesible
+        function filterProducts(searchTerm) {
+            const products = document.querySelectorAll('.product-item');
+            let visibleCount = 0;
+            
+            products.forEach(product => {
+                const productName = product.querySelector('.product-card > div').textContent.toLowerCase();
+                const productDescription = product.querySelector('.product-description').textContent.toLowerCase();
+                
+                if (productName.includes(searchTerm.toLowerCase()) || 
+                    productDescription.includes(searchTerm.toLowerCase()) ||
+                    searchTerm === '') {
+                    product.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+            
+            // PROBLEMA: Resultado de búsqueda no anunciado
+            const noProductsMessage = document.getElementById('noProductsMessage');
+            if (visibleCount === 0 && searchTerm !== '') {
+                noProductsMessage.style.display = 'block';
+            } else {
+                noProductsMessage.style.display = 'none';
+            }
+        }
+        
+        // PROBLEMA: Ordenamiento sin feedback
+        function sortProducts(sortBy) {
+            const grid = document.getElementById('productsGrid');
+            const products = Array.from(grid.querySelectorAll('.product-item'));
+            
+            products.sort((a, b) => {
+                switch (sortBy) {
+                    case 'name':
+                        const nameA = a.querySelector('.product-card > div').textContent;
+                        const nameB = b.querySelector('.product-card > div').textContent;
+                        return nameA.localeCompare(nameB);
+                        
+                    case 'price-low':
+                    case 'price-high':
+                        const priceA = parseFloat(a.querySelector('.price').textContent.replace(/[€,]/g, ''));
+                        const priceB = parseFloat(b.querySelector('.price').textContent.replace(/[€,]/g, ''));
+                        return sortBy === 'price-low' ? priceA - priceB : priceB - priceA;
+                        
+                    default:
+                        return 0;
+                }
+            });
+            
+            // PROBLEMA: Cambio de orden no anunciado
+            products.forEach(product => grid.appendChild(product));
+        }
+        
+        // PROBLEMA: Filtro por categoría sin feedback
+        function filterByCategory(category) {
+            const products = document.querySelectorAll('.product-item');
+            
+            products.forEach(product => {
+                if (category === '' || product.dataset.category === category) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+        }
+        
+        // PROBLEMA: Funciones adicionales sin accesibilidad
+        function updateQuantitySelection(productId, quantity) {
+            selectedQuantities[productId] = parseInt(quantity);
+        }
+        
+        function toggleFavorite(productId) {
+            const button = document.querySelector(`[onclick="toggleFavorite('${productId}')"]`);
+            const isFavorite = button.textContent === '❤️';
+            
+            button.textContent = isFavorite ? '🤍' : '❤️';
+            
+            // PROBLEMA: Cambio de estado no anunciado
+            showNotification(
+                isFavorite ? 'Eliminado de favoritos' : 'Añadido a favoritos', 
+                'info'
+            );
+        }
+        
+        function notifyWhenAvailable(productId) {
+            // PROBLEMA: Prompt no accesible
+            const email = prompt('Ingresa tu email para notificarte cuando esté disponible:');
+            if (email) {
+                showNotification('Te notificaremos cuando el producto esté disponible', 'success');
+            }
+        }
+        
+        function clearCart() {
+            // PROBLEMA: Confirmación no accesible
+            if (confirm('¿Estás seguro de que quieres vaciar el carrito?')) {
+                cartItems = [];
+                updateCartUI();
+                showNotification('Carrito vaciado', 'info');
+            }
+        }
+        
+        function proceedToCheckout() {
+            showNotification('Redirigiendo al proceso de pago...', 'info');
+            // Simular redirección
+            setTimeout(() => {
+                alert('Demo: Aquí se redirigiría al proceso de pago real');
+            }, 1000);
+        }
+        
+        // Inicialización - PROBLEMA: Sin navegación con teclado
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('TechShop cargado');
+            
+            // PROBLEMA: No configura navegación accesible con teclado
+            // FALTA: Manejo de teclas Escape, Enter, flechas
+            // FALTA: Indicadores de foco apropiados
+        });
+    </script>
+    
+</body>
+</html>
+
+<!--
+PROBLEMAS CRÍTICOS DE ACCESIBILIDAD PARA CORREGIR:
+
+ESTRUCTURA Y NAVEGACIÓN:
+1. ✗ Falta skip links para navegación
+2. ✗ Productos sin estructura semántica (article, header, etc.)
+3. ✗ Filtros y controles sin labels apropiados  
+4. ✗ Carrito lateral sin landmark apropiado
+
+INFORMACIÓN DE PRODUCTOS:
+5. ✗ Imágenes sin alt text descriptivo o con alt innecesario
+6. ✗ Calificaciones con estrellas no accesibles
+7. ✗ Precios sin formato monetario accesible
+8. ✗ Stock info solo visual (colores y emojis)
+9. ✗ Encabezados sin jerarquía apropiada
+
+CONTROLES INTERACTIVOS:
+10. ✗ Botones sin aria-label descriptivo
+11. ✗ Selectores de cantidad sin labels
+12. ✗ Botones de favorito sin descripción de estado
+13. ✗ Botón carrito sin información de contenido
+14. ✗ Botones deshabilitados sin explicación
+
+CARRITO LATERAL:
+15. ✗ Carrito sin role="dialog" o similar
+16. ✗ No maneja foco cuando se abre/cierra
+17. ✗ Botón cerrar sin aria-label
+18. ✗ Lista de productos sin estructura apropiada
+19. ✗ Controles de cantidad sin labels
+20. ✗ Botones eliminar sin confirmación accesible
+
+CONTENIDO DINÁMICO:
+21. ✗ Cambios de carrito no anunciados (aria-live)
+22. ✗ Estados de carga no accesibles
+23. ✗ Notificaciones no anunciadas a lectores de pantalla
+24. ✗ Resultados de filtros/búsqueda no anunciados
+25. ✗ Cambios de cantidad no descritos
+
+FEEDBACK Y ESTADOS:
+26. ✗ Badge de carrito sin descripción accesible
+27. ✗ Productos agotados sin información clara
+28. ✗ Estados de carga sin indicadores apropiados
+29. ✗ Errores y confirmaciones no accesibles
+30. ✗ Cambios de ordenamiento no anunciados
+
+INTERACCIÓN CON TECLADO:
+31. ✗ Carrito no navegable con teclado
+32. ✗ Falta manejo de tecla Escape para cerrar carrito
+33. ✗ Trap de foco no implementado en carrito
+34. ✗ Controles personalizados sin eventos de teclado
+
+FORMULARIOS Y ENTRADAS:
+35. ✗ Campo de búsqueda sin label
+36. ✗ Selectores de filtro sin labels
+37. ✗ Prompts nativos (confirm, prompt) no accesibles
+38. ✗ Entrada de cantidad sin validación accesible
+
+El equipo debe implementar:
+- Landmarks apropiados (main, complementary para carrito)
+- Estructura semántica para productos (article, h2, etc.)
+- Labels y descripciones para todos los controles
+- aria-live regions para cambios dinámicos
+- Manejo apropiado de foco en carrito lateral
+- role="dialog" y trap de foco para carrito
+- aria-label para botones con iconos
+- Descripciones de estado para productos
+- Alternativas accesibles para elementos visuales
+- Navegación con teclado completa
+- Anuncios de cambios de estado y contenido
+- Formato accesible para precios y cantidades
+-->

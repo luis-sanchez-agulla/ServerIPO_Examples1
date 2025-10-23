@@ -1,0 +1,423 @@
+/* 
+Portal de Accesibilidad Web - Estilos Base
+==========================================
+Autor: Marlon Cardenas
+Fecha: Octubre 2025
+Estos estilos proporcionan una base visual para todos los ejercicios.
+NOTA: Los estilos están intencionadamente incompletos en algunos aspectos
+de accesibilidad visual (contraste, tamaños de fuente, espaciado) para que
+los estudiantes también los mejoren.
+*/
+
+/* Variables CSS para consistencia */
+:root {
+    --color-primario: #007bff;
+    --color-secundario: #6c757d;
+    --color-exito: #28a745;
+    --color-advertencia: #ffc107;
+    --color-error: #dc3545;
+    --color-info: #17a2b8;
+    
+    --fondo-claro: #f8f9fa;
+    --fondo-oscuro: #343a40;
+    --texto-primario: #212529;
+    --texto-secundario: #6c757d;
+    
+    --radio-borde: 0.25rem;
+    --sombra-suave: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    --transicion-base: all 0.15s ease-in-out;
+}
+
+/* Reset y base */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.5;
+    color: var(--texto-primario);
+    background-color: #ffffff;
+    margin: 0;
+    padding: 0;
+}
+
+/* Tipografía */
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.5rem; }
+h5 { font-size: 1.25rem; }
+h6 { font-size: 1rem; }
+
+p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+/* Layout principal */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -15px;
+}
+
+.col {
+    flex: 1;
+    padding: 0 15px;
+}
+
+/* Header del portal */
+.portal-header {
+    background: linear-gradient(135deg, var(--color-primario), #0056b3);
+    color: white;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+}
+
+.portal-title {
+    font-size: 2.5rem;
+    font-weight: 300;
+    margin-bottom: 0.5rem;
+}
+
+.portal-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    font-weight: 300;
+}
+
+/* Navegación */
+.navbar {
+    background-color: var(--fondo-claro);
+    border-bottom: 1px solid #dee2e6;
+    padding: 1rem 0;
+}
+
+.nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-item a {
+    text-decoration: none;
+    color: var(--texto-primario);
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radio-borde);
+    transition: var(--transicion-base);
+}
+
+.nav-item a:hover,
+.nav-item a:focus {
+    background-color: var(--color-primario);
+    color: white;
+}
+
+/* Tarjetas de ejercicios */
+.ejercicios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.ejercicio-card {
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: var(--radio-borde);
+    box-shadow: var(--sombra-suave);
+    padding: 1.5rem;
+    transition: var(--transicion-base);
+}
+
+.ejercicio-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.ejercicio-titulo {
+    color: var(--color-primario);
+    margin-bottom: 1rem;
+}
+
+.ejercicio-descripcion {
+    color: var(--texto-secundario);
+    margin-bottom: 1rem;
+}
+
+.dificultad-badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: var(--radio-borde);
+    margin-bottom: 1rem;
+}
+
+.dificultad-basica { background-color: var(--color-exito); color: white; }
+.dificultad-intermedia { background-color: var(--color-advertencia); color: #212529; }
+.dificultad-avanzada { background-color: var(--color-info); color: white; }
+.dificultad-experta { background-color: var(--color-error); color: white; }
+
+.conceptos-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem 0;
+}
+
+.conceptos-list li {
+    display: inline-block;
+    background-color: var(--fondo-claro);
+    padding: 0.25rem 0.5rem;
+    margin: 0.25rem 0.25rem 0.25rem 0;
+    border-radius: var(--radio-borde);
+    font-size: 0.875rem;
+}
+
+/* Botones */
+.btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 1px solid transparent;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: var(--radio-borde);
+    transition: var(--transicion-base);
+    text-decoration: none;
+}
+
+.btn-primary {
+    background-color: var(--color-primario);
+    border-color: var(--color-primario);
+    color: white;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: #0056b3;
+    border-color: #0056b3;
+    color: white;
+}
+
+.btn-secondary {
+    background-color: var(--color-secundario);
+    border-color: var(--color-secundario);
+    color: white;
+}
+
+/* Formularios - INTENCIONADAMENTE PROBLEMÁTICOS PARA LOS EJERCICIOS */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: var(--radio-borde);
+    transition: var(--transicion-base);
+}
+
+.form-control:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Estados de error - PROBLEMÁTICOS A PROPÓSITO */
+.form-control.error {
+    border-color: var(--color-error);
+}
+
+.error-message {
+    color: var(--color-error);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Alertas y mensajes */
+.alert {
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: var(--radio-borde);
+}
+
+.alert-info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+.alert-warning {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeaa7;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+/* Estados de carga */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.spinner {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border: 0.25rem solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spinner-rotate 0.75s linear infinite;
+}
+
+@keyframes spinner-rotate {
+    to { transform: rotate(360deg); }
+}
+
+/* Carrito de compras */
+.producto-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border: 1px solid #dee2e6;
+    margin-bottom: 0.5rem;
+    border-radius: var(--radio-borde);
+}
+
+.producto-info {
+    flex: 1;
+}
+
+.producto-controles {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.cantidad-input {
+    width: 60px;
+    text-align: center;
+}
+
+/* Pasos del proceso de pago */
+.pasos-pago {
+    display: flex;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.paso {
+    flex: 1;
+    text-align: center;
+    padding: 1rem;
+    position: relative;
+}
+
+.paso.activo {
+    background-color: var(--fondo-claro);
+    font-weight: 500;
+}
+
+.paso.completado {
+    background-color: var(--color-exito);
+    color: white;
+}
+
+/* Utilidades */
+.sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.mt-1 { margin-top: 0.25rem; }
+.mt-2 { margin-top: 0.5rem; }
+.mt-3 { margin-top: 1rem; }
+.mt-4 { margin-top: 1.5rem; }
+
+.mb-1 { margin-bottom: 0.25rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-3 { margin-bottom: 1rem; }
+.mb-4 { margin-bottom: 1.5rem; }
+
+.p-2 { padding: 0.5rem; }
+.p-3 { padding: 1rem; }
+.p-4 { padding: 1.5rem; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 10px;
+    }
+    
+    .ejercicios-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .nav-list {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .row {
+        flex-direction: column;
+    }
+}
+
+/* PROBLEMAS INTENCIONADOS PARA LOS ESTUDIANTES:
+   - Contraste de colores insuficiente en algunos elementos
+   - Falta de indicadores de foco más evidentes
+   - Tamaños de fuente muy pequeños en algunos elementos
+   - Falta de espaciado adecuado para elementos clickeables
+   - Estados hover/focus incompletos
+   Los estudiantes deben identificar y corregir estos problemas
+*/
