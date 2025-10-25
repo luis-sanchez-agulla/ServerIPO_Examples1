@@ -302,7 +302,7 @@
                             
                             <!-- Habilidades técnicas - PROBLEMA: Checkboxes sin estructura -->
                                 <div class="mb-3">
-                                <fieldset id="grupoHabilidades">
+                                <fieldset id="grupoHabilidades" aria-describedby="AyudaHabilidadesTecnicas">
                                     <legend class="form-label">Habilidades técnicas</legend>
                                     <div class="field-help" id="AyudaHabilidadesTecnicas">Selecciona todas las que apliquen</div>
                                 
@@ -352,8 +352,9 @@
                                         placeholder="45000"
                                         required="true"
                                         aria-required="true"
-                                        id="SalarioEsperado">
-                                    <div class="field-help" id="SalarioEsperadoHelp" aria-describedby="SalarioEsperadoHelp">Rango entre €15,000 y €150,000</div>
+                                        id="SalarioEsperado"
+                                        aria-describedby="SalarioEsperadoHelp">
+                                    <div class="field-help" id="SalarioEsperadoHelp">Rango entre €15,000 y €150,000</div>
                                 </div>
                                 
                                 <!-- Disponibilidad -->
@@ -500,8 +501,9 @@
                                         class="form-control" 
                                         name="portfolio"
                                         placeholder="https://tu-portfolio.com"
-                                        id="Portfolio">
-                                    <div class="field-help" id="PortfolioHelp" aria-describedby="PortfolioHelp">
+                                        id="Portfolio"
+                                        aria-describedby="PortfolioHelp">
+                                    <div class="field-help" id="PortfolioHelp">
                                         Enlace a tu portfolio o sitio web personal
                                     </div>
                                 </div>
