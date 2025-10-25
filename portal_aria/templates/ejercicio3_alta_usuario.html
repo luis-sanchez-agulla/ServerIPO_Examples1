@@ -239,6 +239,7 @@
                                     <option value="CL">Chile</option>
                                     <option value="OTHER">Otro</option>
                                 </select>
+                                <div class="field-help" id="AyudaPais">Selecciona el país donde resides</div>
                             </div>
                         </div>
                     </fieldset>
@@ -250,8 +251,8 @@
                         <div class="row">
                             <!-- Ocupación -->
                             <div class="col-md-6 mb-3">
-                    <label for="OcupacionActual" class="form-label">Ocupación actual</label>
-                    <input id="OcupacionActual" type="text" 
+                                <label for="OcupacionActual" class="form-label">Ocupación actual</label>
+                                <input id="OcupacionActual" type="text" 
                                        class="form-control" 
                                        name="occupation"
                                        placeholder="Ej: Desarrollador Frontend"
@@ -274,9 +275,9 @@
                             
                             <!-- Experiencia -->
                             <div class="col-md-6 mb-3">
-                    <label for="RangoExperiencia" class="form-label">Años de experiencia</label>
-                    <!-- Range input con ARIA -->
-                    <input id="RangoExperiencia" type="range" 
+                                <label for="RangoExperiencia" class="form-label">Años de experiencia</label>
+                                <!-- Range input con ARIA -->
+                                <input id="RangoExperiencia" type="range" 
                                        class="form-range" 
                                        name="experience"
                                        min="0" 
@@ -303,36 +304,30 @@
                             <div class="checkbox-group">
                                 <div class="row">
                                     <div class="col-md-3">
-                                        <label><input type="checkbox" id="skill_html" name="skills" value="html" style="margin-right: 0.5rem;"> HTML/CSS</label>
+                                        <label for="skill_html" class="form-label"><input type="checkbox" id="skill_html" name="skills" value="html" style="margin-right: 0.5rem;"> HTML/CSS</label>
                                     </div>
                                     <div class="col-md-3">
-                                        <input type="checkbox" name="skills" value="javascript" style="margin-right: 0.5rem;">
-                                        JavaScript
+                                        <label for="skill_javascript" class="form-label"><input type="checkbox" id="skill_javascript" name="skills" value="javascript" style="margin-right: 0.5rem;"> JavaScript</label>
                                     </div>
                                     <div class="col-md-3">
-                                        <input type="checkbox" name="skills" value="react" style="margin-right: 0.5rem;">
-                                        React
+                                        <label for="skill_react" class="form-label"><input type="checkbox" id="skill_react" name="skills" value="react" style="margin-right: 0.5rem;"> React</label>
                                     </div>
                                     <div class="col-md-3">
-                                        <input type="checkbox" name="skills" value="vue" style="margin-right: 0.5rem;">
-                                        Vue.js
+                                        <label for="skill_vue" class="form-label"><input type="checkbox" id="skill_vue" name="skills" value="vue" style="margin-right: 0.5rem;"> Vue.js</label>
                                     </div>
                                 </div>
                                 <div class="row mt-2">
                                     <div class="col-md-3">
-                                        <input type="checkbox" name="skills" value="angular" style="margin-right: 0.5rem;">
-                                        Angular
+                                        <label for="skill_angular" class="form-label"><input type="checkbox" id="skill_angular" name="skills" value="angular" style="margin-right: 0.5rem;"> Angular</label>
                                     </div>
                                     <div class="col-md-3">
-                                        <input type="checkbox" name="skills" value="nodejs" style="margin-right: 0.5rem;">
-                                        Node.js
+                                        <label for="skill_nodejs" class="form-label"><input type="checkbox" id="skill_nodejs" name="skills" value="nodejs" style="margin-right: 0.5rem;"> Node.js</label>
                                     </div>
                                     <div class="col-md-3">
-                                        <input type="checkbox" name="skills" value="python" style="margin-right: 0.5rem;">
-                                        Python
+                                        <label for="skill_python" class="form-label"><input type="checkbox" id="skill_python" name="skills" value="python" style="margin-right: 0.5rem;"> Python</label>
                                     </div>
                                     <div class="col-md-3">
-                                        <label><input type="checkbox" id="skill_other" name="skills" value="other" style="margin-right: 0.5rem;"> Otras</label>
+                                        <label for="skill_other" class="form-label"><input type="checkbox" id="skill_other" name="skills" value="other" style="margin-right: 0.5rem;"> Otras</label>
                                     </div>
                                 </div>
                             </fieldset>
@@ -342,7 +337,7 @@
                         <!-- Salario esperado -->
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <div class="form-label">Salario esperado (EUR/año)</div>
+                                <label for="SalarioEsperado" class="form-label">Salario esperado (EUR/año)</label>
                                 <input type="number" 
                                        class="form-control" 
                                        name="expectedSalary"
@@ -351,7 +346,8 @@
                                        step="1000"
                                        placeholder="45000"
                                        required="true"
-                                       aria-required="true">
+                                       aria-required="true"
+                                       id="SalarioEsperado">
                                 <div class="field-help" id="SalarioEsperadoHelp" aria-describedby="SalarioEsperadoHelp">Rango entre €15,000 y €150,000</div>
                             </div>
                             
@@ -360,10 +356,10 @@
                                 <fieldset id="grupoDisponibilidad">
                                     <legend class="form-label required-field">Disponibilidad para trabajar</legend>
                                     <div class="radio-group" role="radiogroup" aria-labelledby="grupoDisponibilidad">
-                                        <label><input type="radio" id="disponibilidad_inmediata" name="availability" value="immediate" style="margin-right: 0.5rem;"> Inmediata</label>
-                                        <label><input type="radio" id="disponibilidad_2semanas" name="availability" value="2weeks" style="margin-right: 0.5rem;"> 2 semanas</label>
-                                        <label><input type="radio" id="disponibilidad_1mes" name="availability" value="1month" style="margin-right: 0.5rem;"> 1 mes</label>
-                                        <label><input type="radio" id="disponibilidad_negociable" name="availability" value="negotiable" style="margin-right: 0.5rem;"> Negociable</label>
+                                        <label for="disponibilidad_inmediata" class="form-label"><input type="radio" id="disponibilidad_inmediata" name="availability" value="immediate" style="margin-right: 0.5rem;"> Inmediata</label>
+                                        <label for="disponibilidad_2semanas" class="form-label"><input type="radio" id="disponibilidad_2semanas" name="availability" value="2weeks" style="margin-right: 0.5rem;"> 2 semanas</label>
+                                        <label for="disponibilidad_1mes" class="form-label"><input type="radio" id="disponibilidad_1mes" name="availability" value="1month" style="margin-right: 0.5rem;"> 1 mes</label>
+                                        <label for="disponibilidad_negociable" class="form-label"><input type="radio" id="disponibilidad_negociable" name="availability" value="negotiable" style="margin-right: 0.5rem;"> Negociable</label>
                                     </div>
                                 </fieldset>
                             </div>
@@ -377,8 +373,8 @@
                         <div class="row">
                             <!-- Idioma preferido -->
                             <div class="col-md-4 mb-3">
-                                <div class="form-label">Idioma preferido</div>
-                                <select class="form-select" name="preferredLanguage">
+                                <label for="IdiomaPreferido" class="form-label">Idioma preferido</label>
+                                <select class="form-select" name="preferredLanguage" id="IdiomaPreferido">
                                     <option value="es" selected>Español</option>
                                     <option value="en">English</option>
                                     <option value="fr">Français</option>
@@ -389,8 +385,8 @@
                             
                             <!-- Zona horaria -->
                             <div class="col-md-4 mb-3">
-                                <div class="form-label">Zona horaria</div>
-                                <select class="form-select" name="timezone">
+                                <label for="ZonaHoraria" class="form-label">Zona horaria</label>
+                                <select class="form-select" name="timezone" id="ZonaHoraria">
                                     <option value="">Detectar automáticamente</option>
                                     <option value="Europe/Madrid">Europa/Madrid (CET)</option>
                                     <option value="America/Mexico_City">América/Ciudad_de_México</option>
@@ -417,20 +413,16 @@
                             <div class="form-label">Preferencias de notificaciones</div>
                             <div class="checkbox-group">
                                 <div class="mb-2">
-                                    <input type="checkbox" name="notifications" value="email" checked style="margin-right: 0.5rem;">
-                                    Recibir notificaciones por email
+                                    <label for="notificaciones_email" class="form-label"><input type="checkbox" id="notificaciones_email" name="notifications" value="email" checked style="margin-right: 0.5rem;"> Recibir notificaciones por email</label>
                                 </div>
                                 <div class="mb-2">
-                                    <input type="checkbox" name="notifications" value="sms" style="margin-right: 0.5rem;">
-                                    Recibir notificaciones por SMS
+                                    <label for="notificaciones_sms" class="form-label"><input type="checkbox" id="notificaciones_sms" name="notifications" value="sms" style="margin-right: 0.5rem;"> Recibir notificaciones por SMS</label>
                                 </div>
                                 <div class="mb-2">
-                                    <input type="checkbox" name="notifications" value="push" checked style="margin-right: 0.5rem;">
-                                    Recibir notificaciones push
+                                    <label for="notificaciones_push" class="form-label"><input type="checkbox" id="notificaciones_push" name="notifications" value="push" checked style="margin-right: 0.5rem;"> Recibir notificaciones push</label>
                                 </div>
                                 <div class="mb-2">
-                                    <input type="checkbox" name="notifications" value="newsletter" checked style="margin-right: 0.5rem;">
-                                    Suscribirse al newsletter semanal
+                                    <label for="notificaciones_newsletter" class="form-label"><input type="checkbox" id="notificaciones_newsletter" name="notifications" value="newsletter" checked style="margin-right: 0.5rem;"> Suscribirse al newsletter semanal</label>
                                 </div>
                             </div>
                         </div>
@@ -498,40 +490,44 @@
                         <!-- Portfolio/Enlaces -->
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <div class="form-label">Portfolio web</div>
+                                <label for="Portfolio" class="form-label">Portfolio web</label>
                                 <input type="url" 
                                        class="form-control" 
                                        name="portfolio"
-                                       placeholder="https://tu-portfolio.com">
+                                       placeholder="https://tu-portfolio.com"
+                                       id="Portfolio">
                                 <div class="field-help" id="PortfolioHelp" aria-describedby="PortfolioHelp">
                                     Enlace a tu portfolio o sitio web personal
                                 </div>
                             </div>
                             
                             <div class="col-md-6 mb-3">
-                                <div class="form-label">Perfil de LinkedIn</div>
+                                <label for="Linkedin" class="form-label">Perfil de LinkedIn</label>
                                 <input type="url" 
                                        class="form-control" 
                                        name="linkedin"
-                                       placeholder="https://linkedin.com/in/tu-perfil">
+                                       placeholder="https://linkedin.com/in/tu-perfil"
+                                       id="Linkedin">
                             </div>
                         </div>
                         
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <div class="form-label">GitHub/GitLab</div>
+                                <label for="GitHub" class="form-label">GitHub/GitLab</label>
                                 <input type="url" 
                                        class="form-control" 
                                        name="github"
-                                       placeholder="https://github.com/tu-usuario">
+                                       placeholder="https://github.com/tu-usuario"
+                                       id="GitHub">
                             </div>
                             
                             <div class="col-md-6 mb-3">
-                                <div class="form-label">Otro enlace relevante</div>
+                                <label for="OtroEnlace" class="form-label">Otro enlace relevante</label>
                                 <input type="url" 
                                        class="form-control" 
                                        name="otherLink"
-                                       placeholder="https://...">
+                                       placeholder="https://..."
+                                       id="OtroEnlace">
                             </div>
                         </div>
                     </div>
@@ -548,28 +544,24 @@
                             <div class="checkbox-group">
                                 <div class="mb-3">
                                     <input id="AceptoTerminos" type="checkbox" name="agreeTerms" required aria-required="true" style="margin-right: 0.5rem;">
-                                    <label for="AceptoTerminos"><span>Acepto los <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Términos y condiciones (se abre en ventana nueva)">términos y condiciones de uso</a> del servicio</span></label>
+                                    <label for="AceptoTerminos" class="form-label"><span>Acepto los <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Términos y condiciones (se abre en ventana nueva)">términos y condiciones de uso</a> del servicio</span></label>
                                 </div>
                                 
                                 <div class="mb-3">
-                                    <input type="checkbox" name="agreePrivacy" required style="margin-right: 0.5rem;">
-                                    <span>
-                                        He leído y acepto la 
-                                        <a href="#" target="_blank">política de privacidad</a>
-                                    </span>
+                                    <input id="AceptoPrivacidad" type="checkbox" name="agreePrivacy" required aria-required="true" style="margin-right: 0.5rem;">
+                                    <label for="AceptoPrivacidad" class="form-label">He leído y acepto la
+                                        <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Política de privacidad (se abre en ventana nueva)"> política de privacidad</a>
+                                    </label>
                                 </div>
-                                
+
                                 <div class="mb-3">
-                                    <input type="checkbox" name="agreeMarketing" style="margin-right: 0.5rem;">
-                                    <span>
-                                        Acepto recibir comunicaciones comerciales y marketing 
-                                        (opcional)
-                                    </span>
+                                    <input id="AceptoMarketing" type="checkbox" name="agreeMarketing" style="margin-right: 0.5rem;">
+                                    <label for="AceptoMarketing" class="form-label">Acepto recibir comunicaciones comerciales y marketing (opcional)</label>
                                 </div>
                                 
                                 <div class="mb-3">
                                     <input id="ConfirmoEdad" type="checkbox" name="confirmAge" required aria-required="true" style="margin-right: 0.5rem;">
-                                    <label for="ConfirmoEdad">Confirmo que soy mayor de 18 años</label>
+                                    <label for="ConfirmoEdad" class="form-label ">Confirmo que soy mayor de 18 años</label>
                                 </div>
                             </div>
                         </fieldset>
