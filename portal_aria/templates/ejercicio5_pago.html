@@ -235,25 +235,25 @@
                     </div>
                     
                     <!-- PROBLEMA: Indicador de pasos sin accesibilidad -->
-                    <div class="step-indicator">
+                    <div class="step-indicator" role="list" aria-label="Indicador de pasos">
                         <div class="step-connector"></div>
                         
-                        <div class="step active" data-step="1">
+                        <div class="step active" data-step="1" role="listitem" aria-concurrent="step">
                             <div class="step-number">1</div>
                             <div class="step-title">Información Personal</div>
                         </div>
                         
-                        <div class="step" data-step="2">
+                        <div class="step" data-step="2" role="listitem">
                             <div class="step-number">2</div>
                             <div class="step-title">Envío y Facturación</div>
                         </div>
-                        
-                        <div class="step" data-step="3">
+
+                        <div class="step" data-step="3" role="listitem">
                             <div class="step-number">3</div>
                             <div class="step-title">Método de Pago</div>
                         </div>
                         
-                        <div class="step" data-step="4">
+                        <div class="step" data-step="4" role="listitem">
                             <div class="step-number">4</div>
                             <div class="step-title">Confirmación</div>
                         </div>
@@ -261,7 +261,7 @@
                 </div>
                 
                 <!-- PROBLEMA: Contenido principal sin landmark -->
-                <div id="mainContent" class="checkout-content">
+                <div id="mainContent" role="main" class="checkout-content">
                     <div class="row">
                         
                         <!-- Columna principal del formulario -->
@@ -1260,9 +1260,9 @@ PROBLEMAS CRÍTICOS DE ACCESIBILIDAD PARA CORREGIR:
 
 ESTRUCTURA Y NAVEGACIÓN:
 1. ✗ Falta skip links                                                      (HECHO)
-2. ✗ Proceso de pasos sin landmark apropiado (main)
-3. ✗ Indicadores de progreso sin aria-current
-4. ✗ Formulario sin fieldset/legend para agrupar secciones
+2. ✗ Proceso de pasos sin landmark apropiado (main)                        (HECHO)        
+3. ✗ Indicadores de progreso sin aria-current                              (HECHO)
+4. ✗ Formulario sin fieldset/legend para agrupar secciones             
 5. ✗ Sidebar resumen sin complementary landmark
 
 MANEJO DE PASOS:
@@ -1318,8 +1318,8 @@ CONTEXTO Y AYUDA:
 41. ✗ Ayudas contextuales no asociadas
 
 El equipo debe implementar:
-- role="main" para contenido principal
-- Indicadores de progreso accesibles (aria-current, progressbar)
+- role="main" para contenido principal                                      (HECHO)
+- Indicadores de progreso accesibles (aria-current, progressbar)            (HECHO)
 - fieldset/legend para agrupar campos relacionados
 - Asociaciones correctas label/input
 - aria-live regions para cambios dinámicos
