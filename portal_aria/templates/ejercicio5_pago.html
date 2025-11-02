@@ -230,15 +230,15 @@
                 <!-- PROBLEMA: Header de progreso sin accesibilidad -->
                 <div class="progress-header">
                     <!-- PROBLEMA: Título sin estructura apropiada -->
-                    <div style="font-size: 1.8rem; font-weight: 300; margin-bottom: 2rem; text-align: center;">
+                    <h1 id="page-title" style="font-size: 1.8rem; font-weight: 300; margin-bottom: 2rem; text-align: center;">
                         Proceso de Pago Seguro
-                    </div>
+                    </h1>
                     
                     <!-- PROBLEMA: Indicador de pasos sin accesibilidad -->
                     <div class="step-indicator" role="list" aria-label="Indicador de pasos">
                         <div class="step-connector"></div>
                         
-                        <div class="step active" data-step="1" role="listitem" aria-concurrent="step">
+                        <div class="step active" data-step="1" role="listitem" aria-current="step">
                             <div class="step-number">1</div>
                             <div class="step-title">Información Personal</div>
                         </div>
@@ -261,7 +261,9 @@
                 </div>
                 
                 <!-- PROBLEMA: Contenido principal sin landmark -->
-                <div id="mainContent" role="main" class="checkout-content">
+                <div id="mainContent" role="main" class="checkout-content" aria-labelledby="page-title" tabindex="-1">
+                    <!-- Región en vivo para anuncios accesibles -->
+                    <div id="liveRegion" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
                     <div class="row">
                         
                         <!-- Columna principal del formulario -->
@@ -271,64 +273,72 @@
                             <form id="checkoutForm" novalidate>
                                 
                                 <!-- PASO 1: Información Personal - MÚLTIPLES PROBLEMAS -->
-                                <div class="step-panel active" data-panel="1">
+                                <div class="step-panel active" data-panel="1" tabindex="-1" aria-hidden="false">
                                     <!-- PROBLEMA: Sin fieldset para agrupar -->
-                                    <div class="form-section">
-                                        <div class="section-title">
+                                    <fieldset class="form-section">
+                                        <legend class="section-title">
                                             👤 Información Personal
-                                        </div>
+                                        </legend>
                                         
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
                                                 <!-- PROBLEMA: Label sin asociación -->
-                                                <div class="form-label required">Nombre</div>
+                                                <label for="firstName" class="form-label required">Nombre</label>
                                                 <input type="text" 
                                                        class="form-control" 
+                                                       id="firstName"
                                                        name="firstName"
                                                        placeholder="Tu nombre"
-                                                       autocomplete="given-name">
-                                                <div class="field-error" style="display: none;"></div>
+                                                       autocomplete="given-name"
+                                                       required>
+                                                <div class="field-error" id="firstName-error" style="display: none;"></div>
                                             </div>
                                             
                                             <div class="col-md-6 mb-3">
-                                                <div class="form-label required">Apellidos</div>
+                                                <label for="lastName" class="form-label required">Apellidos</label>
                                                 <input type="text" 
                                                        class="form-control" 
+                                                       id="lastName"
                                                        name="lastName"
                                                        placeholder="Tus apellidos"
-                                                       autocomplete="family-name">
-                                                <div class="field-error" style="display: none;"></div>
+                                                       autocomplete="family-name"
+                                                       required>
+                                                <div class="field-error" id="lastName-error" style="display: none;"></div>
                                             </div>
                                         </div>
                                         
                                         <div class="row">
                                             <div class="col-md-8 mb-3">
-                                                <div class="form-label required">Correo electrónico</div>
+                                                <label for="email" class="form-label required">Correo electrónico</label>
                                                 <input type="email" 
                                                        class="form-control" 
+                                                       id="email"
                                                        name="email"
                                                        placeholder="tu@email.com"
-                                                       autocomplete="email">
-                                                <div class="field-error" style="display: none;"></div>
+                                                       autocomplete="email"
+                                                       required>
+                                                <div class="field-error" id="email-error" style="display: none;"></div>
                                             </div>
                                             
                                             <div class="col-md-4 mb-3">
-                                                <div class="form-label required">Teléfono</div>
+                                                <label for="phone" class="form-label required">Teléfono</label>
                                                 <input type="tel" 
                                                        class="form-control" 
+                                                       id="phone"
                                                        name="phone"
                                                        placeholder="+34 600 000 000"
-                                                       autocomplete="tel">
-                                                <div class="field-error" style="display: none;"></div>
+                                                       autocomplete="tel"
+                                                       required>
+                                                <div class="field-error" id="phone-error" style="display: none;"></div>
                                             </div>
                                         </div>
                                         
                                         <!-- PROBLEMA: Checkbox sin estructura accesible -->
                                         <div class="mb-3">
-                                            <input type="checkbox" name="createAccount" style="margin-right: 0.5rem;">
-                                            <span>Crear una cuenta para futuras compras más rápidas</span>
+                                            <input type="checkbox" id="createAccount" name="createAccount" style="margin-right: 0.5rem;">
+                                            <label for="createAccount">Crear una cuenta para futuras compras más rápidas</label>
                                         </div>
-                                    </div>
+                                    </fieldset>
                                     
                                     <!-- Botones de navegación - PROBLEMAS -->
                                     <div style="display: flex; justify-content: end; gap: 1rem;">
@@ -342,7 +352,7 @@
                                 </div>
                                 
                                 <!-- PASO 2: Envío y Facturación - PROBLEMAS -->
-                                <div class="step-panel" data-panel="2">
+                                <div class="step-panel" data-panel="2" tabindex="-1" aria-hidden="true">
                                     
                                     <!-- Dirección de envío -->
                                     <div class="form-section">
@@ -481,7 +491,7 @@
                                 </div>
                                 
                                 <!-- PASO 3: Método de Pago - PROBLEMAS CRÍTICOS -->
-                                <div class="step-panel" data-panel="3">
+                                <div class="step-panel" data-panel="3" tabindex="-1" aria-hidden="true">
                                     
                                     <div class="form-section">
                                         <div class="section-title">
@@ -659,7 +669,7 @@
                                 </div>
                                 
                                 <!-- PASO 4: Confirmación - PROBLEMAS -->
-                                <div class="step-panel" data-panel="4">
+                                <div class="step-panel" data-panel="4" tabindex="-1" aria-hidden="true">
                                     
                                     <div class="form-section">
                                         <div class="section-title">
@@ -902,7 +912,11 @@
                     currentStep++;
                     showStep(currentStep);
                     updateStepIndicator();
-                    
+
+                    // Mover el foco al nuevo panel
+                    const panel = document.querySelector(`[data-panel="${currentStep}"]`);
+                    if (panel) panel.focus();
+                    announce(`Paso ${currentStep} de ${totalSteps}`);
                     // PROBLEMA: No maneja el foco apropiadamente
                     window.scrollTo(0, 0);
                 }
@@ -915,7 +929,10 @@
                 currentStep--;
                 showStep(currentStep);
                 updateStepIndicator();
-                
+
+                const panel = document.querySelector(`[data-panel="${currentStep}"]`);
+                if (panel) panel.focus();
+                announce(`Paso ${currentStep} de ${totalSteps}`);
                 // PROBLEMA: No enfoca elemento apropiado
                 window.scrollTo(0, 0);
             }
@@ -931,6 +948,7 @@
             if (panel) {
                 panel.classList.add('active');
                 // PROBLEMA: No usa aria-hidden apropiadamente
+                panel.setAttribute('aria-hidden', 'false');
             }
         }
         
@@ -939,6 +957,7 @@
             if (panel) {
                 panel.classList.remove('active');
                 // PROBLEMA: No actualiza estados ARIA
+                panel.setAttribute('aria-hidden', 'true');
             }
         }
         
@@ -950,10 +969,13 @@
                 
                 if (stepNum === currentStep) {
                     step.classList.add('active');
+                    step.setAttribute('aria-current', 'step');
                 } else if (stepNum < currentStep) {
                     step.classList.add('completed');
+                    step.removeAttribute('aria-current');
+                } else {
+                    step.removeAttribute('aria-current');
                 }
-                
                 // PROBLEMA: No actualiza aria-current o similar
             });
         }
@@ -974,19 +996,23 @@
             
             currentPanel.querySelectorAll('.form-control, .form-select').forEach(field => {
                 field.classList.remove('error-state');
+                field.removeAttribute('aria-invalid');
+                field.removeAttribute('aria-describedby');
             });
             
             requiredFields.forEach(field => {
                 if (!field.value.trim()) {
                     isValid = false;
-                    
-                    // PROBLEMA: Error no accesible
+                    // Error con estado ARIA
                     field.classList.add('error-state');
                     const errorDiv = field.parentNode.querySelector('.field-error');
                     if (errorDiv) {
                         errorDiv.style.display = 'block';
                         errorDiv.textContent = 'Este campo es requerido';
-                        // PROBLEMA: No usa aria-invalid
+                        const errId = field.id ? `${field.id}-error` : `${field.name}-error`;
+                        if (!errorDiv.id) errorDiv.id = errId;
+                        field.setAttribute('aria-invalid', 'true');
+                        field.setAttribute('aria-describedby', errorDiv.id);
                     }
                     
                     if (!firstError) firstError = field;
@@ -1047,6 +1073,20 @@
                 errorDiv.style.display = 'block';
                 errorDiv.textContent = message;
                 // PROBLEMA: No asocia error con campo
+                const errId = field.id ? `${field.id}-error` : `${field.name}-error`;
+                if (!errorDiv.id) errorDiv.id = errId;
+                field.setAttribute('aria-invalid', 'true');
+                field.setAttribute('aria-describedby', errorDiv.id);
+            }
+        }
+
+        // Región en vivo para anuncios
+        function announce(text) {
+            const live = document.getElementById('liveRegion');
+            if (live) {
+                // Limpieza breve para forzar anuncio en algunos lectores
+                live.textContent = '';
+                setTimeout(() => { live.textContent = text; }, 10);
             }
         }
         
@@ -1262,15 +1302,15 @@ ESTRUCTURA Y NAVEGACIÓN:
 1. ✗ Falta skip links                                                      (HECHO)
 2. ✗ Proceso de pasos sin landmark apropiado (main)                        (HECHO)        
 3. ✗ Indicadores de progreso sin aria-current                              (HECHO)
-4. ✗ Formulario sin fieldset/legend para agrupar secciones             
+4. ✗ Formulario sin fieldset/legend para agrupar secciones                 (HECHO)
 5. ✗ Sidebar resumen sin complementary landmark
 
 MANEJO DE PASOS:
-6. ✗ Cambios de paso no anunciados (aria-live)
-7. ✗ Paneles ocultos sin aria-hidden
+6. ✗ Cambios de paso no anunciados (aria-live)                            (HECHO)
+7. ✗ Paneles ocultos sin aria-hidden                                      (HECHO)
 8. ✗ Progreso sin role="progressbar" y valores aria
-9. ✗ Navegación entre pasos sin manejo de foco
-10. ✗ Indicador visual sin estado accesible
+9. ✗ Navegación entre pasos sin manejo de foco                            (HECHO)
+10. ✗ Indicador visual sin estado accesible                               (HECHO)
 
 FORMULARIOS Y CAMPOS:
 11. ✗ Labels no asociados correctamente
@@ -1320,7 +1360,7 @@ CONTEXTO Y AYUDA:
 El equipo debe implementar:
 - role="main" para contenido principal                                      (HECHO)
 - Indicadores de progreso accesibles (aria-current, progressbar)            (HECHO)
-- fieldset/legend para agrupar campos relacionados
+- fieldset/legend para agrupar campos relacionados                          (HECHO)
 - Asociaciones correctas label/input
 - aria-live regions para cambios dinámicos
 - role="dialog" para overlays con trap de foco
