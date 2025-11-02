@@ -51,7 +51,7 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
+            background: rgb(0, 0, 0);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -62,7 +62,7 @@
         
         .step.active .step-number {
             background: white;
-            color: #007bff;
+            color: #000000;
         }
         
         .step.completed .step-number {
@@ -115,7 +115,7 @@
             font-size: 1.2rem;
             font-weight: 600;
             margin-bottom: 1rem;
-            color: #007bff;
+            color: #000000;
         }
         
         .payment-method {
@@ -209,8 +209,12 @@
 </head>
 
 <body>
-    <!-- PROBLEMA: Falta skip link -->
-    
+    <!-- PROBLEMA: Falta skip link (HECHO)-->
+
+    <div class="skip-link">
+        <a href="#mainContent" class="btn btn-primary">Saltar al contenido principal</a>
+    </div>
+
     <div class="checkout-container">
         <div class="container">
             
@@ -257,7 +261,7 @@
                 </div>
                 
                 <!-- PROBLEMA: Contenido principal sin landmark -->
-                <div class="checkout-content">
+                <div id="mainContent" class="checkout-content">
                     <div class="row">
                         
                         <!-- Columna principal del formulario -->
@@ -768,7 +772,7 @@
                                     <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid #dee2e6;">
                                         <div>
                                             <div style="font-weight: 500;">Laptop Gaming Pro X1</div>
-                                            <div style="font-size: 0.9rem; color: #6c757d;">Cantidad: 1</div>
+                                            <div style="font-size: 0.9rem; color: #000000;">Cantidad: 1</div>
                                         </div>
                                         <div style="font-weight: 500;">€1,299.99</div>
                                     </div>
@@ -776,7 +780,7 @@
                                     <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid #dee2e6;">
                                         <div>
                                             <div style="font-weight: 500;">Auriculares Wireless Pro</div>
-                                            <div style="font-size: 0.9rem; color: #6c757d;">Cantidad: 2</div>
+                                            <div style="font-size: 0.9rem; color: #000000;">Cantidad: 2</div>
                                         </div>
                                         <div style="font-weight: 500;">€399.98</div>
                                     </div>
@@ -798,7 +802,7 @@
                                     </div>
                                     <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
                                         <span>Descuento:</span>
-                                        <span style="color: #28a745;">-€208.00</span>
+                                        <span style="color: #000000;">-€208.00</span>
                                     </div>
                                     <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: bold; border-top: 2px solid #007bff; padding-top: 1rem;">
                                         <span>Total:</span>
@@ -815,14 +819,14 @@
                                                class="form-control" 
                                                placeholder="Código promocional"
                                                id="promoCode">
-                                        <button onclick="applyPromoCode()" class="btn btn-outline-primary">
+                                        <button onclick="applyPromoCode()" class="btn btn-outline-primary" style="color: #000000;">
                                             Aplicar
                                         </button>
                                     </div>
                                 </div>
                                 
                                 <!-- Garantías y seguridad -->
-                                <div style="margin-top: 1.5rem; font-size: 0.9rem; color: #6c757d; text-align: center;">
+                                <div style="margin-top: 1.5rem; font-size: 0.9rem; color: #000000; text-align: center;">
                                     <div style="margin-bottom: 0.5rem;">🔒 Pago 100% seguro</div>
                                     <div style="margin-bottom: 0.5rem;">📞 Soporte 24/7</div>
                                     <div style="margin-bottom: 0.5rem;">📦 Garantía de 30 días</div>
@@ -1255,7 +1259,7 @@
 PROBLEMAS CRÍTICOS DE ACCESIBILIDAD PARA CORREGIR:
 
 ESTRUCTURA Y NAVEGACIÓN:
-1. ✗ Falta skip links
+1. ✗ Falta skip links                                                      (HECHO)
 2. ✗ Proceso de pasos sin landmark apropiado (main)
 3. ✗ Indicadores de progreso sin aria-current
 4. ✗ Formulario sin fieldset/legend para agrupar secciones
