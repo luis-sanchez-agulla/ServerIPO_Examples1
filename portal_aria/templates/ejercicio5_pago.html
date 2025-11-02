@@ -104,11 +104,25 @@
         }
         
         .form-section {
-            margin-bottom: 2rem;
+            /* Normaliza fieldset para no alterar el layout */
+            display: block;
+            box-sizing: border-box;
+            width: 100%;
+            min-width: 0;
+            margin: 0 0 2rem 0; /* sin márgenes horizontales */
             padding: 1.5rem;
             background: #f8f9fa;
             border-radius: 8px;
-            border-left: 4px solid #007bff;
+            border: 0; /* elimina borde nativo del fieldset */
+            border-left: 4px solid #007bff; /* mantiene estilo anterior */
+        }
+
+        /* Alinea el legend como los títulos anteriores */
+        .form-section > legend.section-title {
+            display: block;
+            width: 100%;
+            padding: 0;
+            margin: 0 0 1rem 0;
         }
         
         .section-title {
@@ -715,28 +729,31 @@
                                             <div style="font-weight: 500; margin-bottom: 0.5rem;">
                                                 ⚠️ Términos y Condiciones Finales
                                             </div>
-                                            <div class="mb-2">
-                                                <input type="checkbox" name="acceptTerms" required style="margin-right: 0.5rem;">
-                                                <span>
-                                                    Acepto los 
-                                                    <!-- PROBLEMA: Link sin indicar nueva ventana -->
-                                                    <a href="#" target="_blank">términos y condiciones de venta</a>
-                                                </span>
-                                            </div>
-                                            <div class="mb-2">
-                                                <input type="checkbox" name="acceptPrivacy" required style="margin-right: 0.5rem;">
-                                                <span>
-                                                    He leído la 
-                                                    <a href="#" target="_blank">política de privacidad</a>
-                                                </span>
-                                            </div>
-                                            <div class="mb-2">
-                                                <input type="checkbox" name="acceptRefund" required style="margin-right: 0.5rem;">
-                                                <span>
-                                                    Entiendo la 
-                                                    <a href="#" target="_blank">política de devoluciones</a>
-                                                </span>
-                                            </div>
+                                            <fieldset style="border:0; padding:0; margin:0;">
+                                                <legend class="visually-hidden">Términos y Condiciones</legend>
+                                                <div class="mb-2">
+                                                    <input type="checkbox" name="acceptTerms" required style="margin-right: 0.5rem;">
+                                                    <span>
+                                                        Acepto los 
+                                                        <!-- PROBLEMA: Link sin indicar nueva ventana -->
+                                                        <a href="#" target="_blank">términos y condiciones de venta</a>
+                                                    </span>
+                                                </div>
+                                                <div class="mb-2">
+                                                    <input type="checkbox" name="acceptPrivacy" required style="margin-right: 0.5rem;">
+                                                    <span>
+                                                        He leído la 
+                                                        <a href="#" target="_blank">política de privacidad</a>
+                                                    </span>
+                                                </div>
+                                                <div class="mb-2">
+                                                    <input type="checkbox" name="acceptRefund" required style="margin-right: 0.5rem;">
+                                                    <span>
+                                                        Entiendo la 
+                                                        <a href="#" target="_blank">política de devoluciones</a>
+                                                    </span>
+                                                </div>
+                                            </fieldset>
                                         </div>
                                     </div>
                                     

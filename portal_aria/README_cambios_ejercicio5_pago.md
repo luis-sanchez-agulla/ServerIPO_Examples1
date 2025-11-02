@@ -48,6 +48,24 @@ Este documento resume todos los cambios funcionales aplicados para mejorar la ac
 - A petición, se restauraron los textos originales de los comentarios con prefijo `PROBLEMA:` en las secciones donde habían cambiado, para mantener la guía del ejercicio visible e intacta.
 - Las mejoras funcionales permanecen aplicadas aunque los comentarios adviertan de problemas (para fines didácticos del ejercicio).
 
+## Puntos completados (según checklist del documento)
+- 1. Skip links — HECHO
+- 2. Landmark principal (main) — HECHO
+- 3. Indicadores de progreso con aria-current — HECHO
+ - 4. Agrupación del formulario con fieldset/legend — HECHO
+- 6. Anuncios de cambio de paso (aria-live) — HECHO
+- 7. Paneles ocultos gestionados con aria-hidden — HECHO
+- 9. Manejo de foco entre pasos — HECHO
+- 10. Estado accesible del indicador visual — HECHO
+- 16. Métodos de pago agrupados con fieldset/legend — HECHO
+
+### Punto 4 — estado y pendientes
+- Hecho:
+  - Paso 1: Información Personal en `<fieldset>` con `<legend>`.
+  - Paso 2: Dirección de Envío, Opciones de Envío e Información de Facturación en `<fieldset>/<legend>`.
+  - Paso 3: Métodos de Pago y Detalles de la Tarjeta en `<fieldset>/<legend>`.
+  - Paso 4: Bloque de aceptación de términos (tres checkboxes) agrupado en `<fieldset>` con `<legend>` (legend oculto y encabezado visual mantenido).
+
 ## Verificación sugerida
 - Ejecutar la página y usar la extensión WAVE o el inspector de accesibilidad para comprobar:
   - Presencia de landmark `main` y jerarquía de encabezados.
@@ -58,7 +76,8 @@ Este documento resume todos los cambios funcionales aplicados para mejorar la ac
   - Asociación `label`/`input` y feedback de validación con `aria-invalid` y `aria-describedby`.
 
 ## Próximos pasos recomendados
-- Paso 2: añadir `<fieldset>/<legend>` a Dirección de Envío y Opciones de Envío; etiquetar radios y hacerlos navegables con teclado.
-- Paso 3: agrupar métodos de pago en `<fieldset>/<legend>`, mejorar accesibilidad de la tarjeta (CVV, previsualización, anuncios).
-- Overlays: convertir a `role="dialog"` con `aria-modal`, gestionar foco y escape; barra de progreso con atributos ARIA.
+- Formularios: completar etiquetas accesibles (labels con `for/id`) donde faltan y hacer los radios totalmente navegables con teclado.
+- Método de pago: anunciar el cambio de método (live region), ayuda CVV accesible (sin `alert`), y descripción alternativa de la previsualización de tarjeta.
+- Overlays: convertir a `role="dialog"` con `aria-modal`, `aria-labelledby`/`aria-describedby`, trampa de foco y Escape; barra de progreso con atributos ARIA.
 - Sidebar: envolver el resumen en `<aside>` con encabezado y anunciar cambios de totales.
+- Completar Punto 4: añadir `<fieldset>/<legend>` al bloque de aceptación de términos del Paso 4.
